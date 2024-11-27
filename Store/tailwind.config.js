@@ -4,7 +4,11 @@ module.exports = {
      './shop/templates/pages/*.html',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'magnolia': ['Magnolia Script', 'cursive'],
+      },
+    },
   },
   plugins: [],
 }

@@ -1,0 +1,21 @@
+/* Including Magnolia Script font */
+@font-face {
+    font-family: 'Magnolia Script';
+    src: url('Magnolia-Script.otf') format('opentype');
+}
+
+/* For webkit browsers (Chrome, Edge, Safari) */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* For Firefox */
+html {
+    scrollbar-width: none; /* Hides the scrollbar */
+}
+
+/* General overflow settings */
+body {
+    overflow: -moz-scrollbars-none; /* Fallback for old browsers */
+    overflow-y: scroll; /* Ensure content can scroll without a visible bar */
+}

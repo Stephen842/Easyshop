@@ -10,16 +10,122 @@
         <meta http-equiv='content-type' content='text/html; charset = utf-8'/>
         <meta name = 'robots' content = 'index, follow'>
 
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+        <link rel="icon" sizes="256x256" href="{% static 'favicon/android-chrome-256x256.png' %}">
+        <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+
         <link rel = 'stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
         <link rel = 'stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Magnolia+Script&display=swap" rel="stylesheet">
+
         
         <!-- TailwindCSS Compilation -->
         <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
         
         <title> {{ title }}</title>
     </head>
 
     <body>
-    </body>
+        <main>
+            <!-- Background Image -->
+            <div class="h-screen w-full bg-cover bg-center relative" style="background-image: url({% static 'background_0.jpg' %});">
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+                
+                <!-- Header -->
+                <header class="absolute top-0 w-full">
+                    <div class="px-2 py-2 lg:px-0 lg:py-0">
+                        <!-- Navigation Bar -->
+                        <div class="flex justify-between items-center backdrop-blur-md bg-white opacity-50 rounded-xl p-4 shadow-lg lg:rounded-tl-none lg:rounded-tr-none sticky top-0 z-50">
+                            <!-- Logo -->
+                            <div class="flex -ml-12 lg:-ml-0">
+                                <a href="/" class="flex items-center">
+                                    <!-- Logo Image -->
+                                    <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
+                                    <!-- Brand Name -->
+                                    <span class="text-md lg:text-2xl font-magnolia text-gray-800 font-bold -ml-8">
+                                        Elvix Luxe
+                                    </span>
+                                </a>
+                            </div>
+                            
+                            <!-- Navigation Links -->
+                            <nav class="hidden md:flex mr-8 gap-24 text-gray-800 text-xl font-magnolia">
+                                <a href="/" class="hover:text-gray-400 transition">Shop</a>
+                                <a href="/blog" class="hover:text-gray-400 transition">Blog</a>
+                                <a href="/gallery" class="hover:text-gray-400 transition">Gallery</a>
+                                <a href="/contact" class="hover:text-gray-400 transition">Contact</a>
+                            </nav>
+    
+                            <div class="hidden md:flex mr-8 gap-16 text-gray-800 text-2xl font-bold">
+                                <a></a>
+                                <a href="/blog" class="hover:text-gray-400 transition"><i class="bi bi-search"></i></a>
+                                <a href="/gallery" class="hover:text-gray-400 transition"><i class="bi bi-cart"></i></a>
+                                <a href="/contact" class="hover:text-gray-400 transition"><i class="bi bi-telephone"></i></a>
+                                <a href="/contact" class="hover:text-gray-400 transition"><i></i></a>
+                            </div>
+            
+                            <!-- Mobile Menu Icon -->
+                            <div class="md:hidden">
+                                <button class="text-gray-800 focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Text and Images Section -->
+                        <div class="flex flex-col items-center justify-center mt-12 lg:mt-52 text-white mb-8">
+                            <!-- Text Section -->
+                            <div class="mb-6 text-center">
+                                <h2 class="text-xl lg:text-5xl font-medium mb-4 lg:mb-8">Crafted Exclusively for You</h2>
+                                <h2 class="text-3xl lg:text-8xl font-bold">Freshly Arrived & Truly Unique</h2>    
+                            </div>
+                            
+                            <!-- Image Section -->
+                            <div class="flex flex-wrap justify-center space-x-2 lg:space-x-0 mt-6 lg:mt-12">
+                                <div class="relative">
+                                    <!-- Image -->
+                                    <img src="{% static 'her.png' %}" alt="Elvix for Her" 
+                                        class="object-cover w-40 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 lg:w-[50rem] lg:h-[50rem] rounded-tl-none rounded-br-none shadow-lg">
+                                    
+                                    <!-- Button -->
+                                    <button class="absolute inset-0 flex items-center justify-center bg-red-600 text-white font-bold py-2 px-4 rounded-lg opacity-20 hover:opacity-30 transition">
+                                        <span class="bg-white hover:bg-gray-100 text-gray-800 cursor-pointer py-2 px-4 md:py-4 md:px-6 rounded md:text-lg"> For Her </span>
+                                    </button>
+                                </div>
+                                <div class="relative">
+                                    <!-- Image -->
+                                    <img src="{% static 'him.png' %}" alt="Elvix for Him" 
+                                        class="object-cover w-40 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 lg:w-[50rem] lg:h-[50rem] rounded-tl-none rounded-br-none shadow-lg">
+                                    
+                                    <!-- Button -->
+                                    <button class="absolute inset-0 flex items-center justify-center bg-gray-800 text-white font-bold py-2 px-4 rounded-lg opacity-20 hover:opacity-30 transition">
+                                        <span class="bg-red-500 hover:bg-red-600 text-white cursor-pointer py-2 px-4 md:py-4 md:px-6 rounded md:text-lg"> For Him </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            
+            <!-- Section -->
+            <section class="relative mt-24 lg:mt-52 px-6">
+                <div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-6">Flash Sales</h2>
+                        <p class="text-gray-600">Get the best deals on our exclusive collections.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>    
 </html>

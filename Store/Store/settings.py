@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'widget_tweaks',  # For manipulation of form field attribute
     'django_browser_reload',
+    'django.contrib.humanize', 
 ]
 
 MIDDLEWARE = [
