@@ -1,3 +1,10 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    max-width: 100%; /* Prevents content overflow */
+}
+
 /* Including Magnolia Script font */
 @font-face {
     font-family: 'Magnolia Script';

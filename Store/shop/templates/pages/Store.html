@@ -6,7 +6,7 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv = 'X-UA-Compatible' content = 'IE=edge'>
-        <meta name = 'viewport' content = 'width=device-width, initial-scale = 1'/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv='content-type' content='text/html; charset = utf-8'/>
         <meta name = 'robots' content = 'index, follow'>
 
@@ -34,7 +34,7 @@
     <body class="bg-gray-100">
         <main>
             <!-- Background Image -->
-            <div class="h-screen w-full bg-cover bg-center relative" style="background-image: url({% static 'background_0.jpg' %});">
+            <div class="h-screen w-full bg-cover bg-center relative" style="background-image: url(../../static/background_0.jpg);">
                 <!-- Overlay -->
                 <div class="absolute inset-0 bg-black bg-opacity-70"></div>
                 
@@ -47,23 +47,23 @@
                             <div class="flex -ml-12 lg:-ml-0">
                                 <a href="/" class="flex items-center">
                                     <!-- Logo Image -->
-                                    <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
+                                    <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-20 w-28 object-contain">
                                     <!-- Brand Name -->
-                                    <span class="text-md lg:text-2xl font-magnolia text-gray-800 font-bold -ml-8">
+                                    <span class="text-md lg:text-xl font-magnolia text-gray-800 font-bold -ml-8">
                                         Elvix Luxe
                                     </span>
                                 </a>
                             </div>
                             
                             <!-- Navigation Links -->
-                            <nav class="hidden md:flex mr-8 gap-24 text-gray-800 text-xl font-magnolia">
+                            <nav class="hidden lg:flex mr-2 gap-12 text-gray-800 text-lg font-magnolia">
                                 <a href="/" class="hover:text-gray-400 transition">Shop</a>
                                 <a href="/blog" class="hover:text-gray-400 transition">Blog</a>
                                 <a href="/gallery" class="hover:text-gray-400 transition">Gallery</a>
                                 <a href="/contact" class="hover:text-gray-400 transition">Contact</a>
                             </nav>
     
-                            <div class="hidden md:flex mr-8 gap-16 text-gray-800 text-2xl font-bold">
+                            <div class="hidden lg:flex mr-8 gap-12 text-gray-800 text-lg font-bold">
                                 <a></a>
                                 <a href="/blog" class="hover:text-gray-400 transition"><i class="bi bi-search"></i></a>
                                 <a href="/gallery" class="hover:text-gray-400 transition"><i class="bi bi-cart"></i></a>
@@ -72,7 +72,7 @@
                             </div>
             
                             <!-- Mobile Menu Icon -->
-                            <div class="md:hidden">
+                            <div class="lg:hidden">
                                 <button class="text-gray-800 focus:outline-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -82,19 +82,19 @@
                         </div>
                         
                         <!-- Text and Images Section -->
-                        <div class="flex flex-col items-center justify-center mt-24 lg:mt-52 text-white mb-8">
+                        <div class="flex flex-col items-center justify-center mt-24 text-white mb-8">
                             <!-- Text Section -->
                             <div class="mb-6 text-center">
-                                <h2 class="text-xl lg:text-5xl font-medium mb-4 lg:mb-8">Crafted Exclusively for You</h2>
-                                <h2 class="text-3xl lg:text-8xl font-bold">Freshly Arrived & Truly Unique</h2>    
+                                <h2 class="text-xl font-medium mb-4 lg:mb-8">Crafted Exclusively for You</h2>
+                                <h2 class="text-3xl font-bold">Freshly Arrived & Truly Unique</h2>    
                             </div>
                             
                             <!-- Image Section -->
-                            <div class="flex justify-center space-x-2 lg:space-x-0 mt-6 lg:mt-12 shadow-xl">
+                            <div class="flex justify-center space-x-1 lg:space-x-0 mt-6 lg:mt-12 shadow-xl lg:mx-52">
                                 <div class="relative">
                                     <!-- Image -->
                                     <img src="{% static 'her.png' %}" alt="Elvix for Her" 
-                                        class="object-cover w-40 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 lg:w-[50rem] lg:h-[50rem] shadow-lg">
+                                        class="object-cover w-48 h-80 sm:w-56 sm:h-80 md:w-64 md:h-96 lg:w-[50rem] lg:h-[45rem] shadow-lg">
                                     
                                     <!-- Button -->
                                     <button class="absolute inset-0 flex items-center justify-center bg-red-600 text-white font-bold py-2 px-4 rounded-lg opacity-20 hover:opacity-30 transition">
@@ -104,7 +104,7 @@
                                 <div class="relative">
                                     <!-- Image -->
                                     <img src="{% static 'him.png' %}" alt="Elvix for Him" 
-                                        class="object-cover w-40 h-64 sm:w-56 sm:h-80 md:w-64 md:h-96 lg:w-[50rem] lg:h-[50rem] shadow-lg">
+                                        class="object-cover w-48 h-80 sm:w-56 sm:h-80 md:w-64 md:h-96 lg:w-[50rem] lg:h-[45rem] shadow-lg">
                                     
                                     <!-- Button -->
                                     <button class="absolute inset-0 flex items-center justify-center bg-gray-800 text-white font-bold py-2 px-4 rounded-lg opacity-20 hover:opacity-30 transition">
@@ -118,13 +118,7 @@
             </div>
             
             <!-- Section 1 -->
-            <div class="relative h-48 mt-24 lg:mt-[52rem] px-6 lg:block">
-                <div>
-                    <h2> </h2>
-                    <p> </p>
-                </div>
-            </div>
-            <div class="relative h-48 mt-24 lg:mt-[52rem] px-6  lg:block">
+            <div class="relative hidden h-48 lg:block lg:mb-[16rem]">
                 <div>
                     <h2> </h2>
                     <p> </p>
@@ -134,25 +128,25 @@
             <div>
                 <section>
                     <div class="mb-24">
-                        <h2 class="text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Flash Sales </h2>
-                        <div class="mt-20 mb-20 flex justify-center items-center gap-8 text-gray-800 text-2xl font-bold">
-                            <div>
-                                <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" />
+                        <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Flash Sales </h2>
+                        <div class="mt-20 mb-20 lg:mx-8 flex overflow-x-auto justify-center items-center gap-4 text-gray-800 text-2xl font-bold">
+                            <div class="min-w-max">
+                                <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
                                 <h2 class="mb-2"> Flat Hill Shoe </h2>
                                 <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
                             </div>
-                            <div>
-                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" />
+                            <div class="min-w-max">
+                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
                                 <h2 class="mb-2"> Ocean Blue Ring </h2>
                                 <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
                             </div>
-                            <div>
-                                <img src="{% static 'wallet.png' %}" alt="Elvix wallet" />
+                            <div class="min-w-max">
+                                <img src="{% static 'wallet.png' %}" alt="Elvix wallet" class="w-72 h-auto"/>
                                 <h2 class="mb-2"> Brown Leather Wallet </h2>
                                 <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
                             </div>
-                            <div>
-                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" />
+                            <div class="min-w-max">
+                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
                                 <h2 class="mb-2"> Silver Side Wrist Watch </h2>
                                 <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
                             </div>
@@ -166,7 +160,7 @@
                         <div class="flex items-center justify-center gap-24 bg-gray-200 w-[92%] mx-52 shadow-lg transition">
                             <div class="p-16">
                                 <h2 class="text-3xl text-gray-600 mb-4 font-bold tracking-wide"> Everyday collection {% now 'Y' %}</h2>
-                                <h2 class="text-5xl text-gray-800 mb-4 font-extrabold mb-6 leading-tight"> Be yourself </h2>
+                                <h2 class="text-5xl text-gray-800 mb-4 font-extrabold leading-tight"> Be yourself </h2>
                                 <p class="whitespace-pre-line leading-relaxed mb-8 font-mono text-xl text-gray-800 font-semibold">
                                     The ideal selection for your everyday use ina Super Saver
                                     range within a reasonable price range is here for you to
@@ -341,7 +335,7 @@
                     </div>
 
                     <div>
-                        <div class="h-screen w-full bg-cover bg-center relative mb-32" style="background-image: url({% static 'background_0.jpg' %});">
+                        <div class="h-screen w-full bg-cover bg-center relative mb-32" style="background-image: url(../../static/background_0.jpg);">
                             <div class="absolute inset-0 bg-black bg-opacity-70"></div>
                             <div class="absolute inset-0 flex items-center justify-center text-center text-white">
                                 <div>
