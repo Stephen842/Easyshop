@@ -63,12 +63,12 @@
                                 <a href="/contact" class="hover:text-gray-400 transition">Contact</a>
                             </nav>
     
-                            <div class="hidden lg:flex mr-8 gap-12 text-gray-800 text-lg font-bold">
+                            <div class="hidden lg:flex mr-8 gap-8 text-gray-800 text-lg font-bold">
                                 <a></a>
                                 <a href="/blog" class="hover:text-gray-400 transition"><i class="bi bi-search"></i></a>
                                 <a href="/gallery" class="hover:text-gray-400 transition"><i class="bi bi-cart"></i></a>
                                 <a href="/contact" class="hover:text-gray-400 transition"><i class="bi bi-telephone"></i></a>
-                                <a href="/contact" class="hover:text-gray-400 transition"><i></i></a>
+                                <a href="/contact" class="hover:text-gray-400 transition"><i class="bi bi-moon-stars"></i></a>
                             </div>
             
                             <!-- Mobile Menu Icon -->
@@ -129,35 +129,83 @@
                 <section>
                     <div class="mb-24">
                         <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Flash Sales </h2>
-                        <div class="mt-20 mb-20 lg:mx-8 flex overflow-x-auto justify-center items-center gap-4 text-gray-800 text-2xl font-bold">
-                            <div class="min-w-max">
-                                <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
-                                <h2 class="mb-2"> Flat Hill Shoe </h2>
-                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                            </div>
-                            <div class="min-w-max">
-                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
-                                <h2 class="mb-2"> Ocean Blue Ring </h2>
-                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                            </div>
-                            <div class="min-w-max">
-                                <img src="{% static 'wallet.png' %}" alt="Elvix wallet" class="w-72 h-auto"/>
-                                <h2 class="mb-2"> Brown Leather Wallet </h2>
-                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                            </div>
-                            <div class="min-w-max">
-                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
-                                <h2 class="mb-2"> Silver Side Wrist Watch </h2>
-                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                        <div class="mt-20 mb-20 lg:mx-4 flex">
+                            <div class="relative w-full">
+                                <!-- Carousel -->
+                                <div class="relative overflow-hidden">
+                                    <div class="flex overflow-x-auto space-x-4 carousel ">
+                                        <!-- Item 1 -->
+                                        <div class="min-w-max">
+                                            <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Flat Hill Shoe</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                        <!-- Item 2 -->
+                                        <div class="min-w-max">
+                                            <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Ocean Blue Ring</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                        <!-- Item 3 -->
+                                        <div class="min-w-max">
+                                            <img src="{% static 'wallet.png' %}" alt="Elvix wallet" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Brown Leather Wallet</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                        <!-- Item 4 -->
+                                        <div class="min-w-max">
+                                            <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Silver Side Wrist Watch</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                        <!-- Item 5 -->
+                                        <div class="min-w-max">
+                                            <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Silver Side Wrist Watch</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                        <!-- Item 6 -->
+                                        <div class="min-w-max">
+                                            <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Ocean Blue Ring</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                         <!-- Item 6 -->
+                                         <div class="min-w-max">
+                                            <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Ocean Blue Ring</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                         <!-- Item 6 -->
+                                         <div class="min-w-max">
+                                            <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Ocean Blue Ring</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                         <!-- Item 6 -->
+                                         <div class="min-w-max">
+                                            <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Ocean Blue Ring</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                         <!-- Item 6 -->
+                                         <div class="min-w-max">
+                                            <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                            <h2 class="mb-2">Ocean Blue Ring</h2>
+                                            <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                          
                         <div class="flex justify-center items-center">
                             <button class="bg-red-500 hover:bg-red-600 text-white cursor-pointer rounded-sm w-52 h-16 text-2xl font-bold"> View All </button>
                         </div>
                     </div>
 
                     <div class="mt-32 mb-20">
-                        <div class="flex items-center justify-center gap-24 bg-gray-200 w-[92%] mx-52 shadow-lg transition">
+                        <div class="flex justify-center gap-24 bg-gray-200 w-[98%] mx-4 shadow-lg transition">
                             <div class="p-16">
                                 <h2 class="text-3xl text-gray-600 mb-4 font-bold tracking-wide"> Everyday collection {% now 'Y' %}</h2>
                                 <h2 class="text-5xl text-gray-800 mb-4 font-extrabold leading-tight"> Be yourself </h2>
@@ -172,7 +220,7 @@
                                 <img src="{% static 'outfit.png' %}" alt="Elvix Outfit" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-center gap-2 mt-2 w-[92%] mx-52 shadow-lg transition">
+                        <div class="flex justify-center gap-2 mt-1 w-[98%] mx-4 shadow-lg transition">
                             <div class="relative w-full max-w-xl mx-auto">
                                 <img src="{% static 'vanity-bag.png' %}" alt="Elvix vanity-bag" class="w-full h-auto">
                                 <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-2xl font-bold bg-opacity-50 px-4 py-2"> Bags </h2>
@@ -190,27 +238,74 @@
 
                     <div class="mt-24">
                         <div>
-                            <h2 class="text-center text-5xl text-gray-800 font-bold font-[poppins] mb-24"> Explore New Arrivals </h2>
+                            <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Explore New Arrivals </h2>
                             <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-gray-800 text-2xl font-bold">
-                                <div>
-                                    <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" />
-                                    <h2 class="mb-2"> Flat Hill Shoe </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                                </div>
-                                <div>
-                                    <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" />
-                                    <h2 class="mb-2"> Ocean Blue Ring </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                                </div>
-                                <div>
-                                    <img src="{% static 'wallet.png' %}" alt="Elvix wallet" />
-                                    <h2 class="mb-2"> Brown Leather Wallet </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                                </div>
-                                <div>
-                                    <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" />
-                                    <h2 class="mb-2"> Silver Side Wrist Watch </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                <div class="relative w-full">
+                                    <!-- Carousel -->
+                                    <div class="relative overflow-hidden">
+                                        <div class="flex overflow-x-auto space-x-4 carousel ">
+                                            <!-- Item 1 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Flat Hill Shoe</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 2 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 3 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'wallet.png' %}" alt="Elvix wallet" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Brown Leather Wallet</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 4 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Silver Side Wrist Watch</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 5 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Silver Side Wrist Watch</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 6 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <h2 class="text-center text-5xl text-gray-800 font-bold font-[poppins] mb-20"> Shop By Category </h2>
@@ -222,7 +317,7 @@
                                 <button class="text-xl font-medium text-gray-800 rounded-md px-6 py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300"> Cap </button>
                                 <button class="text-xl font-medium text-gray-800 rounded-md px-6 py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300"> Hoodie </button>
                             </div>
-                            <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-gray-800 text-2xl font-bold">
+                            <div class="mt-20 mb-28 flex justify-center items-center gap-4 mx-4 text-gray-800 text-2xl font-bold">
                                 <div>
                                     <img src="{% static 'shirt-5.png' %}" alt="Elvix shirt" />
                                     <h2 class="mb-2"> Shirt </h2>
@@ -251,7 +346,7 @@
                     </div>
 
                     <div>
-                        <div class="flex items-center justify-center gap-8 w-[92%] mx-52 transition mb-24">
+                        <div class="flex justify-center w-[98%] mx-4 transition mb-24">
                             <div class="relative">
                                 <div class="absolute inset-0 bg-black bg-opacity-70"></div>
                                 <img src="{% static 'urban.png' %}" alt="Elvix Outfit"/>
@@ -268,27 +363,74 @@
                         </div>
 
                         <div>
-                            <h2 class="text-center text-5xl text-gray-800 font-bold font-[poppins] mb-24"> Best Sellers </h2>
+                            <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Best Sellers </h2>
                             <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-gray-800 text-2xl font-bold">
-                                <div>
-                                    <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" />
-                                    <h2 class="mb-2"> Flat Hill Shoe </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                                </div>
-                                <div>
-                                    <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" />
-                                    <h2 class="mb-2"> Ocean Blue Ring </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                                </div>
-                                <div>
-                                    <img src="{% static 'wallet.png' %}" alt="Elvix wallet" />
-                                    <h2 class="mb-2"> Brown Leather Wallet </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
-                                </div>
-                                <div>
-                                    <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" />
-                                    <h2 class="mb-2"> Silver Side Wrist Watch </h2>
-                                    <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                <div class="relative w-full">
+                                    <!-- Carousel -->
+                                    <div class="relative overflow-hidden">
+                                        <div class="flex overflow-x-auto space-x-4 carousel ">
+                                            <!-- Item 1 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'flat-hill-shoe.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Flat Hill Shoe</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 2 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 3 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'wallet.png' %}" alt="Elvix wallet" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Brown Leather Wallet</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 4 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Silver Side Wrist Watch</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 5 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'wrist-watch.png' %}" alt="Elvix flat shoe" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Silver Side Wrist Watch</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                            <!-- Item 6 -->
+                                            <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                             <!-- Item 6 -->
+                                             <div class="min-w-max">
+                                                <img src="{% static 'blue-ring.png' %}" alt="Elvix blue-ring" class="w-72 h-auto"/>
+                                                <h2 class="mb-2">Ocean Blue Ring</h2>
+                                                <h2><span class="line-through">$200</span>  <span class="text-red-500">&nbsp &nbsp $180 </span> </h2>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -319,7 +461,7 @@
                             </div>
                         </div>
                         
-                        <div class="flex items-center justify-center gap-24 bg-gray-200 w-[92%] mx-52 shadow-lg transition mb-52">
+                        <div class="flex justify-center gap-24 bg-gray-200 w-[98%] mx-4 shadow-lg transition mb-52">
                             <div class="p-16">
                                 <h2 class="text-3xl text-gray-600 mb-4 font-bold tracking-wide"> Dress Sharp Everyday</h2>
                                 <p class="whitespace-pre-line leading-relaxed mb-8 font-mono text-xl text-gray-800 font-semibold">
@@ -350,25 +492,23 @@
         </main>
         <footer class="relative w-full text-gray-800 py-8">
             <div>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div class="">
-                        <a href="/" class="flex items-center">
-                            <!-- Logo Image -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 justify-evenly items-start gap-4">
+                    <div>
+                        <a href="/" class="flex items-center" aria-label="Homepage">
                             <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
-                            <!-- Brand Name -->
                             <span class="text-md lg:text-2xl font-magnolia text-gray-800 font-bold -ml-8">
                                 Elvix Luxe
                             </span>
                         </a>
-                        <p class="whitespace-pre-line m-12 -mt-12">
+                        <p class="whitespace-pre-line m-12 -mt-12 text-left">
                             Lorem ipsum dolor sit amet, consectetur
                             adipiscing elit, sed do eiusmod tempor incididunt
                             cilisis.
                         </p>
                     </div>
                     <div>
-                        <h2 class="text-2xl md:text-3xl mb-8 font-bold">Links</h2>
-                        <ul class="text-lg md:text-xl font-bold space-y-4">
+                        <h2 class="text-lg mb-8 font-bold">Links</h2>
+                        <ul class="font-bold space-y-4 text-left">
                             <li><a href="#"><i class="bi bi-arrow-right"></i> Shop</a></li>
                             <li><a href="#"><i class="bi bi-arrow-right"></i> Blog</a></li>
                             <li><a href="#"><i class="bi bi-arrow-right"></i> Gallery</a></li>
@@ -376,24 +516,25 @@
                         </ul>
                     </div>
                     <div>
-                        <h2 class="text-2xl md:text-3xl mb-8 font-bold">Contact Us</h2>
-                        <ul class="text-lg md:text-xl font-bold space-y-4">
+                        <h2 class="text-lg mb-8 font-bold">Contact Us</h2>
+                        <ul class="font-bold space-y-4 text-left">
                             <li><i class="bi bi-geo-alt"></i> Plot 1 Platform Road Lugbe Abuja</li>
                             <li><i class="bi bi-telephone-inbound"></i> +234 807 462 5742</li>
                             <li><i class="bi bi-envelope-plus"></i> someone@gmail.com</li>
                         </ul>
                     </div>
                     <div>
-                        <h2 class="text-2xl md:text-3xl mb-8 font-bold">Signup For The Latest News</h2>
-                        <input type="email" placeholder="Enter Email" class="w-60 h-12"/>
-                        <button class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 text-xl font-medium shadow-md hover:shadow-lg transition"> Submit </button>
+                        <h2 class="md:text-lg mb-8 font-bold">Signup For The Latest News</h2>
+                        <input type="email" placeholder="Enter Email" aria-label="Email for newsletter" class="w-60 lg:w-44 h-12"/>
+                        <button class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 lg:mt-0 lg:ml-4">Submit</button>
                     </div>
-                </div>
+                </div>                
             </div>
             <div class='mt-32 flex justify-between px-12'>
                 <h2 class='text-sm'> Copyright © Elvix Luxe. All Rights Reserved. </h2>
                 <h2 class='text-sm'><a href="https://github.com/Stephen842" class='text-red-500 font-bold'>By PythoGenius </a></h2>
             </div>
         </footer>
+        <script src="{% static 'js/carousel.js' %}"></script>
     </body>    
 </html>

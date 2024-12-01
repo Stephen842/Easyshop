@@ -26,3 +26,17 @@ body {
     overflow: -moz-scrollbars-none; /* Fallback for old browsers */
     overflow-y: scroll; /* Ensure content can scroll without a visible bar */
 }
+
+@keyframes moveContainer {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.min-w-max {
+    animation: moveContainer 15s linear infinite; /* Adjust the duration for speed */
+    white-space: nowrap; /* Prevent wrapping of the content */
+}
