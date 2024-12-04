@@ -205,22 +205,25 @@
                     </div>
 
                     <div class="mt-32 mb-20">
-                        <div class="flex justify-center gap-24 bg-gray-200 w-[98%] mx-4 shadow-lg transition">
-                            <div class="p-16">
-                                <h2 class="text-3xl text-gray-600 mb-4 font-bold tracking-wide"> Everyday collection {% now 'Y' %}</h2>
-                                <h2 class="text-5xl text-gray-800 mb-4 font-extrabold leading-tight"> Be yourself </h2>
-                                <p class="whitespace-pre-line leading-relaxed mb-8 font-mono text-xl text-gray-800 font-semibold">
-                                    The ideal selection for your everyday use ina Super Saver
-                                    range within a reasonable price range is here for you to
-                                    keep you stay steady 100% trendy.
+                        <div class="flex flex-col lg:flex-row justify-center lg:gap-24 bg-gray-200 w-[98%] mx-auto lg:mx-4 shadow-lg rounded-lg overflow-hidden transition">
+                            <!-- Text Content -->
+                            <div class="p-8 lg:p-16 text-center lg:text-left">
+                                <h2 class="text-2xl lg:text-3xl text-gray-600 mb-4 font-bold tracking-wide">Everyday Collection {% now 'Y' %}</h2>
+                                <h2 class="text-4xl lg:text-5xl text-gray-800 mb-4 font-extrabold leading-snug">Be Yourself</h2>
+                                <p class="leading-relaxed mb-8 font-mono text-lg lg:text-xl text-gray-800 font-semibold">
+                                    The ideal selection for your everyday use in a Super Saver range, 
+                                    within a reasonable price range, is here for you to keep you 100% trendy.
                                 </p>
-                                <button class="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-8 py-4 text-xl font-medium shadow-md hover:shadow-lg transition"> Explore </button>
+                                <button class="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-6 lg:px-8 py-3 lg:py-4 text-lg lg:text-xl font-medium shadow-md hover:shadow-lg transition">
+                                    Explore
+                                </button>
                             </div>
-                            <div class="ml-32">
-                                <img src="{% static 'outfit.png' %}" alt="Elvix Outfit" />
+                            <!-- Image Content -->
+                            <div class="flex justify-center items-center p-4 lg:ml-32">
+                                <img src="{% static 'outfit.png' %}" alt="Elvix Outfit" class="w-72 lg:w-auto max-w-full h-auto rounded-lg shadow-md" />
                             </div>
                         </div>
-                        <div class="flex justify-center gap-2 mt-1 w-[98%] mx-4 shadow-lg transition">
+                        <div class="flex justify-center gap-0 md:gap-2 mt-1 w-[100%] md:w-[98%] mx-4 shadow-lg transition">
                             <div class="relative w-full max-w-xl mx-auto">
                                 <img src="{% static 'vanity-bag.png' %}" alt="Elvix vanity-bag" class="w-full h-auto">
                                 <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-2xl font-bold bg-opacity-50 px-4 py-2"> Bags </h2>
@@ -461,28 +464,32 @@
                             </div>
                         </div>
                         
-                        <div class="flex justify-center gap-24 bg-gray-200 w-[98%] mx-4 shadow-lg transition mb-52">
-                            <div class="p-16">
-                                <h2 class="text-3xl text-gray-600 mb-4 font-bold tracking-wide"> Dress Sharp Everyday</h2>
-                                <p class="whitespace-pre-line leading-relaxed mb-8 font-mono text-xl text-gray-800 font-semibold">
+                        <div class="flex flex-col lg:flex-row justify-center lg:gap-24 bg-gray-200 w-[98%] mx-auto lg:mx-4 shadow-lg rounded-lg overflow-hidden transition mb-32">
+                            <!-- Text Content -->
+                            <div class="p-8 lg:p-16 text-center lg:text-left">
+                                <h2 class="text-2xl lg:text-3xl text-gray-600 mb-4 font-bold tracking-wide"> Dress Sharp Everyday</h2>
+                                <p class="leading-relaxed mb-8 font-mono text-lg lg:text-xl text-gray-800 font-semibold">
                                     We have the premium set of formal wears for to make you
                                     look confident and comfortable at your job.
                                 </p>
-                                <button class="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-8 py-4 text-xl font-medium shadow-md hover:shadow-lg transition"> Explore Collection</button>
+                                <button class="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-6 lg:px-8 py-3 lg:py-4 text-lg lg:text-xl font-medium shadow-md hover:shadow-lg transition"> 
+                                    Explore Collection
+                                </button>
                             </div>
-                            <div class="ml-32">
-                                <img src="{% static 'sharp-dress.png' %}" alt="Elvix Outfit" />
+                            <!-- Image Content -->
+                            <div class="flex justify-center items-center p-4 lg:ml-32">
+                                <img src="{% static 'sharp-dress.png' %}" alt="Elvix Outfit" class="w-72 lg:w-auto max-w-full h-auto rounded-lg shadow-md"/>
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <div class="h-screen w-full bg-cover bg-center relative mb-32" style="background-image: url(../../static/background_0.jpg);">
+                        <div class="h-screen w-full bg-cover bg-center relative mb-16 lg:mb-32" style="background-image: url(../../static/background_0.jpg);">
                             <div class="absolute inset-0 bg-black bg-opacity-70"></div>
                             <div class="absolute inset-0 flex items-center justify-center text-center text-white">
                                 <div>
-                                    <h2 class="text-xl lg:text-5xl font-medium mb-4 lg:mb-24">Visit Our Outlet In</h2>
-                                    <h2 class="text-3xl lg:text-8xl font-bold hover:text-red-500">Abuja</h2>
+                                    <h2 class="text-3xl lg:text-5xl font-medium mb-24">Visit Our Outlet In</h2>
+                                    <h2 class="text-5xl lg:text-8xl font-bold hover:text-red-500">Abuja</h2>
                                 </div>
                             </div>
                         </div>
@@ -491,23 +498,22 @@
             </div>
         </main>
         <footer class="relative w-full text-gray-800 py-8">
-            <div>
+            <div class="ml-6 md:ml-8 lg:ml-0">
                 <div class="grid grid-cols-1 lg:grid-cols-4 justify-evenly items-start gap-4">
-                    <div>
+                    <div class="-ml-12 lg:ml-2 lg:-mt-8">
                         <a href="/" class="flex items-center" aria-label="Homepage">
                             <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
                             <span class="text-md lg:text-2xl font-magnolia text-gray-800 font-bold -ml-8">
                                 Elvix Luxe
                             </span>
                         </a>
-                        <p class="whitespace-pre-line m-12 -mt-12 text-left">
-                            Lorem ipsum dolor sit amet, consectetur
-                            adipiscing elit, sed do eiusmod tempor incididunt
-                            cilisis.
+                        <p class="whitespace-pre-line m-12 -mt-12 text-left font-[poppins]">
+                            Redefining style with elegance.
+                            Modern clothing for every occasion.
                         </p>
                     </div>
-                    <div>
-                        <h2 class="text-lg mb-8 font-bold">Links</h2>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-lg mb-4 lg:mb-8 font-bold">Links</h2>
                         <ul class="font-bold space-y-4 text-left">
                             <li><a href="#"><i class="bi bi-arrow-right"></i> Shop</a></li>
                             <li><a href="#"><i class="bi bi-arrow-right"></i> Blog</a></li>
@@ -515,24 +521,26 @@
                             <li><a href="#"><i class="bi bi-arrow-right"></i> Contact</a></li>
                         </ul>
                     </div>
-                    <div>
-                        <h2 class="text-lg mb-8 font-bold">Contact Us</h2>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-lg mb-4 lg:mb-8 font-bold">Contact Us</h2>
                         <ul class="font-bold space-y-4 text-left">
                             <li><i class="bi bi-geo-alt"></i> Plot 1 Platform Road Lugbe Abuja</li>
                             <li><i class="bi bi-telephone-inbound"></i> +234 807 462 5742</li>
                             <li><i class="bi bi-envelope-plus"></i> someone@gmail.com</li>
                         </ul>
                     </div>
-                    <div>
-                        <h2 class="md:text-lg mb-8 font-bold">Signup For The Latest News</h2>
-                        <input type="email" placeholder="Enter Email" aria-label="Email for newsletter" class="w-60 lg:w-44 h-12"/>
-                        <button class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 lg:mt-0 lg:ml-4">Submit</button>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="md:text-lg mb-4 lg:mb-8 font-bold">Signup For The Latest News</h2>
+                        <div class="">
+                            <input type="email" placeholder="Enter Email" aria-label="Email for newsletter" class="w-60 lg:w-44 h-12"/>
+                            <button class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                        </div>
                     </div>
                 </div>                
             </div>
-            <div class='mt-32 flex justify-between px-12'>
-                <h2 class='text-sm'> Copyright © Elvix Luxe. All Rights Reserved. </h2>
-                <h2 class='text-sm'><a href="https://github.com/Stephen842" class='text-red-500 font-bold'>By PythoGenius </a></h2>
+            <div class='mt-16 lg:mt-32 flex justify-between px-2 lg:px-12 text-sm'>
+                <h2> Copyright © Elvix Luxe. All Rights Reserved. </h2>
+                <h2><a href="https://github.com/Stephen842" class='text-red-500 font-bold'> PythoGenius </a></h2>
             </div>
         </footer>
         <script src="{% static 'js/carousel.js' %}"></script>
