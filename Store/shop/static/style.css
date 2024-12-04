@@ -40,3 +40,8 @@ body {
     animation: moveContainer 15s linear infinite; /* Adjust the duration for speed */
     white-space: nowrap; /* Prevent wrapping of the content */
 }
+
+img {
+    pointer-events: none;
+    user-select: none;
+}
