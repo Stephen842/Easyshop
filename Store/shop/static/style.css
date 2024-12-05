@@ -25,6 +25,11 @@ html {
 body {
     overflow: -moz-scrollbars-none; /* Fallback for old browsers */
     overflow-y: scroll; /* Ensure content can scroll without a visible bar */
+
+    /*for the toggle light and dark mode*/
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
 }
 
 @keyframes moveContainer {
@@ -44,4 +49,14 @@ body {
 img {
     pointer-events: none;
     user-select: none;
+}
+
+:root {
+    --bg-color: #f3f4f6;
+    --text-color: #1f2937;
+}
+
+[data-theme="dark"] {
+    --bg-color: #232323;
+    --text-color: white;
 }

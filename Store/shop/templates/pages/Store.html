@@ -31,7 +31,7 @@
         <title> {{ title }}</title>
     </head>
 
-    <body class="bg-gray-100">
+    <body class="">
         <main>
             <!-- Background Image -->
             <div class="h-screen w-full bg-cover bg-center relative" style="background-image: url(../../static/background_0.jpg);">
@@ -63,13 +63,16 @@
                                 <a href="/contact" class="hover:text-gray-400 transition">Contact</a>
                             </nav>
     
-                            <div class="hidden lg:flex mr-8 gap-8 text-gray-800 text-lg font-bold">
+                            <div class="hidden lg:flex items-center mr-8 gap-8 text-gray-800 text-lg font-bold">
                                 <a></a>
                                 <a href="/blog" class="hover:text-gray-400 transition"><i class="bi bi-search"></i></a>
                                 <a href="/gallery" class="hover:text-gray-400 transition"><i class="bi bi-cart"></i></a>
                                 <a href="/contact" class="hover:text-gray-400 transition"><i class="bi bi-telephone"></i></a>
-                                <a href="/contact" class="hover:text-gray-400 transition"><i class="bi bi-moon-stars"></i></a>
+                                <button id="modeSwitch" class="p-2 w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 transition flex items-center justify-center">
+                                    <i id="themeIcon" class="bi bi-moon-stars"></i>
+                                </button>
                             </div>
+                            
             
                             <!-- Mobile Menu Icon -->
                             <div class="lg:hidden">
@@ -128,7 +131,7 @@
             <div>
                 <section>
                     <div class="mb-24">
-                        <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Flash Sales </h2>
+                        <h2 class="mt-16 lg:mt-0 text-center text-5xl font-bold font-[poppins] mb-8"> Flash Sales </h2>
                         <div class="mt-20 mb-20 lg:mx-4 flex">
                             <div class="relative w-full">
                                 <!-- Carousel -->
@@ -226,23 +229,23 @@
                         <div class="flex justify-center md:gap-2 mt-1 w-[100%] md:w-[98%] md:ml-2 lg:ml-3 shadow-lg transition">
                             <div class="relative w-full max-w-xl mx-auto">
                                 <img src="{% static 'elvix-cap2.png' %}" alt="Elvix cap" class="w-full h-auto">
-                                <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-2xl font-bold bg-opacity-50 px-4 py-2"> Caps </h2>
+                                <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xl md:text-2xl font-bold bg-opacity-50 px-4 py-2"> Caps </h2>
                             </div>
                             <div class="relative w-full max-w-xl mx-auto">
                                 <img src="{% static 'elvix-shirt2.png' %}" alt="Elvix shirt" class="w-full h-auto"/>
-                                <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-2xl font-bold bg-opacity-50 px-4 py-2">Shirt</h2>
+                                <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xl md:text-2xl font-bold bg-opacity-50 px-4 py-2">Shirt</h2>
                             </div>
                             <div class="relative w-full max-w-xl mx-auto">
                                 <img src="{% static 'elvix-cap-shirt2.png' %}" alt="Elvix shirts" class="w-full h-auto"/>
-                                <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-2xl font-bold bg-opacity-50 px-4 py-2">Combo</h2>
+                                <h2 class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-xl md:text-2xl font-bold bg-opacity-50 px-4 py-2">Combo</h2>
                             </div>
                         </div>
                     </div>
 
                     <div class="mt-24">
                         <div>
-                            <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Explore New Arrivals </h2>
-                            <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-gray-800 text-2xl font-bold">
+                            <h2 class="mt-16 lg:mt-0 text-center text-5xl font-bold font-[poppins] mb-8"> Explore New Arrivals </h2>
+                            <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-2xl font-bold">
                                 <div class="relative w-full">
                                     <!-- Carousel -->
                                     <div class="relative overflow-hidden">
@@ -311,31 +314,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <h2 class="text-center text-3xl md:text-4xl lg:text-5xl text-gray-800 font-bold font-[poppins] mb-10 lg:mb-20">
+                            <h2 class="text-center text-3xl md:text-4xl lg:text-5xl font-bold font-[poppins] mb-10 lg:mb-20">
                                 Shop By Category
                             </h2>
                             <div class="flex flex-wrap justify-center gap-4 md:gap-6 lg:gap-8 mb-12 lg:mb-20">
-                                <button class="text-lg md:text-xl font-medium text-gray-800 rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300 shadow-md">
+                                <button class="text-lg md:text-xl font-medium rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300 shadow-md">
                                     All
                                 </button>
-                                <button class="text-lg md:text-xl font-medium text-gray-800 rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
+                                <button class="text-lg md:text-xl font-medium rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
                                     T-Shirt
                                 </button>
-                                <button class="text-lg md:text-xl font-medium text-gray-800 rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
+                                <button class="text-lg md:text-xl font-medium rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
                                     Shirt
                                 </button>
-                                <button class="text-lg md:text-xl font-medium text-gray-800 rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
+                                <button class="text-lg md:text-xl font-medium rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
                                     Trouser
                                 </button>
-                                <button class="text-lg md:text-xl font-medium text-gray-800 rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
+                                <button class="text-lg md:text-xl font-medium rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
                                     Cap
                                 </button>
-                                <button class="text-lg md:text-xl font-medium text-gray-800 rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
+                                <button class="text-lg md:text-xl font-medium rounded-md px-4 md:px-6 py-2 md:py-3 hover:shadow-lg transition hover:bg-gray-200 focus:bg-gray-300">
                                     Hoodie
                                 </button>
                             </div>
                             
-                            <div class="mt-12 lg:mt-20 mb-16 lg:mb-28 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-2 lg:mx-4 text-gray-800 text-lg lg:text-2xl font-bold">
+                            <div class="mt-12 lg:mt-20 mb-16 lg:mb-28 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-2 lg:mx-4 text-lg lg:text-2xl font-bold">
                                 <div class="text-center">
                                     <img src="{% static 'shirt-5.png' %}" alt="Elvix shirt" class="w-full h-auto object-cover rounded-lg shadow-md" />
                                     <h2 class="mt-4 mb-2">Shirt</h2>
@@ -408,8 +411,8 @@
                         
 
                         <div>
-                            <h2 class="mt-16 lg:mt-0 text-center text-5xl text-gray-800 font-bold font-[poppins] mb-8"> Best Sellers </h2>
-                            <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-gray-800 text-2xl font-bold">
+                            <h2 class="mt-16 lg:mt-0 text-center text-5xl font-bold font-[poppins] mb-8"> Best Sellers </h2>
+                            <div class="mt-20 mb-28 flex justify-center items-center gap-8 text-2xl font-bold">
                                 <div class="relative w-full">
                                     <!-- Carousel -->
                                     <div class="relative overflow-hidden">
@@ -551,13 +554,13 @@
                 </section>
             </div>
         </main>
-        <footer class="relative w-full text-gray-800 py-8">
+        <footer class="relative w-full py-8">
             <div class="ml-6 md:ml-8 lg:ml-0">
                 <div class="grid grid-cols-1 lg:grid-cols-4 justify-evenly items-start gap-4">
                     <div class="-ml-12 lg:ml-2 lg:-mt-8">
                         <a href="/" class="flex items-center" aria-label="Homepage">
                             <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
-                            <span class="text-md lg:text-2xl font-magnolia text-gray-800 font-bold -ml-8">
+                            <span class="text-md lg:text-2xl font-magnolia font-bold -ml-8">
                                 Elvix Luxe
                             </span>
                         </a>
@@ -597,6 +600,8 @@
                 <h2><a href="https://github.com/Stephen842" class='text-red-500 font-bold'> PythoGenius </a></h2>
             </div>
         </footer>
+
+        <!--This is to prevent the right clicking of mouse to solely prevent users from downloading images-->
         <script>
             document.addEventListener('contextmenu', function (e) {
                 if (e.target.tagName === 'IMG') {
@@ -604,5 +609,8 @@
                 }
             });
         </script>
+
+        <!--This script is an extension of the themeswitcher for the page bg switching-->
+        <script src="{% static 'js/background_switch.js' %}"></script>
     </body>    
 </html>
