@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import ContactForm # Import the form
-from .models import ContactMail  # and also Import the model
+from .models import Category, Post, Comment, ContactMail  # and also Import the model
 
 
 # Create your views here.
@@ -16,10 +16,35 @@ def home(request):
 
 # For the blog page
 def blog(request):
+    posts = Post.objects.all().order_by('-created_on')
     context = {
+        'posts': posts,
         'title': 'Your Style Destination for Fashion Trends and Inspiration',
     }
     return render(request, 'pages/blog.html', context)
+
+# For the blog category
+def blog_category(request, category):
+    posts = Post.objects.filter(
+        categories__name__contains=category
+        ).order_by('-created_on')
+    context = {
+        "category": category,
+        'posts': posts,
+        'title': 'Discover Your Perfect Style',
+    }
+    return render(request, 'pages/category.html', context)
+
+# For the blog details
+def blog_details(request, pk):
+    post = Post.objects.get(pk=pk)
+    comments = Comment.objects.filter(post=post)
+    context = {
+        'post': post,
+        'comments': comments,
+    }
+    return render(request, 'pages/blog_detail.html', context)
+
 
 
 # For the contact page
