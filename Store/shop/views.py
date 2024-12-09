@@ -14,6 +14,14 @@ def home(request):
     }
     return render(request, 'pages/store.html', context)
 
+# For the blog page
+def blog(request):
+    context = {
+        'title': 'Your Style Destination for Fashion Trends and Inspiration',
+    }
+    return render(request, 'pages/blog.html', context)
+
+
 # For the contact page
 def contact(request):
     if request.method == 'POST':
