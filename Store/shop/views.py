@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import ContactForm # Import the form
+from .forms import CommentForm, ContactForm # Import the form
 from .models import Category, Post, Comment, ContactMail  # and also Import the model
 
 
@@ -38,10 +38,24 @@ def blog_category(request, category):
 # For the blog details
 def blog_details(request, pk):
     post = Post.objects.get(pk=pk)
+    
+    # Handle comment form submission
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post  # Associate the comment with the current post
+            comment.save()
+            return redirect(request.path_info)
+    else:
+        form = CommentForm()
+
     comments = Comment.objects.filter(post=post)
+    
     context = {
         'post': post,
         'comments': comments,
+        'form': form,
     }
     return render(request, 'pages/blog_detail.html', context)
 

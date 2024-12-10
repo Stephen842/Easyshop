@@ -29,6 +29,9 @@ class Comment(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey('Post', on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['created_on']
+
     def __str__(self):
         return f"{self.author} on '{self.created_on}'"
 
