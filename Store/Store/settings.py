@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'whitenoise.runserver_nostatic',
     'widget_tweaks',  # For manipulation of form field attribute
     'django_browser_reload',
-    'django.contrib.humanize', 
+    'django.contrib.humanize',
+    'tinymce',
 ]
 
 MIDDLEWARE = [
@@ -138,7 +139,19 @@ STORAGES = {
     },
 }
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#this part is for the sending of email using Gmail as the SMTP provider.
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'elvixluxe@gmail.com'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'elvixluxe@gmail.com'
