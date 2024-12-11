@@ -60,7 +60,7 @@
                             <nav class="hidden lg:flex mr-2 gap-12 text-gray-800 text-lg font-magnolia">
                                 <a href="/" class="hover:text-gray-400 transition">Shop</a>
                                 <a href="{% url 'blog' %}" class="hover:text-gray-400 transition">Blog</a>
-                                <a href="/gallery" class="hover:text-gray-400 transition">Gallery</a>
+                                <a href="{% url 'gallery' %}" class="hover:text-gray-400 transition">Gallery</a>
                                 <a href="{% url 'contact_us' %}" class="hover:text-gray-400 transition">Contact</a>
                             </nav>
     
@@ -207,7 +207,7 @@
                         <ul class="font-bold space-y-4 text-left">
                             <li><a href="/"><i class="bi bi-arrow-right"></i> Shop</a></li>
                             <li><a href="{% url 'blog' %}"><i class="bi bi-arrow-right"></i> Blog</a></li>
-                            <li><a href="#"><i class="bi bi-arrow-right"></i> Gallery</a></li>
+                            <li><a href="{% url 'gallery' %}"><i class="bi bi-arrow-right"></i> Gallery</a></li>
                             <li><a href="{% url 'contact_us' %}"><i class="bi bi-arrow-right"></i> Contact</a></li>
                         </ul>
                     </div>

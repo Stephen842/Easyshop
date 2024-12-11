@@ -63,7 +63,12 @@ def blog_details(request, pk):
     }
     return render(request, 'pages/blog_detail.html', context)
 
-
+def gallery(request):
+    context = {
+        'title': 'The Luxe Wardrobe Showcase',
+    }
+    return render(request, 'pages/gallery.html', context)
+    
 
 # For the contact page
 def contact(request):

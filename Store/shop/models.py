@@ -35,6 +35,13 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.author} on '{self.created_on}'"
+    
+class Gallery(models.Model):
+    image = models.ImageField(upload_to='media/', null=True, blank=True)
+    caption = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.caption
 
 # For the contact us details
 class ContactMail(models.Model):
