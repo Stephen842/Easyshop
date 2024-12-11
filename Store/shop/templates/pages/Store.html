@@ -589,8 +589,10 @@
                     <div class="mb-12 lg:mb-0">
                         <h2 class="md:text-lg mb-4 lg:mb-8 font-bold">Signup For The Latest News</h2>
                         <div class="">
-                            <input type="email" placeholder="Enter Email" aria-label="Email for newsletter" class="w-60 lg:w-44 h-12"/>
-                            <button class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                            <form method='POST' novalidate class='space-y-4'>
+                                {{ form.email|add_class:'mt-1 block w-full border border-gray-300 rounded-md shadow-md p-2 outline-none' }}
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div>                

@@ -22,6 +22,7 @@
         <link rel = 'stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Magnolia+Script&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
         
         <!-- TailwindCSS Compilation -->
@@ -96,6 +97,33 @@
                 </header>
             </div>
         </main>
+        <div class="flex justify-center mt-8">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl text-center font-bold uppercase tracking-wide bg-gradient-to-r from-red-600 via-red-400 to-red-200 bg-clip-text text-transparent"> Our Trends </h2>
+        </div>
+        <!-- Blog Section -->
+        <div class="-mt-8 mb-16 lg:mb-24 font-serif">
+            {% block posts %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {% for post in posts %}
+                        <div class="mt-16 p-4 w-full">
+                            <div>
+                                <a href="{% url 'blog_details' post.pk %}"><img src="{{ post.image.url }}" class='w-full h-68 lg:h-60 object-cover'></a>
+                            </div>
+                            <h3 class="text-lg font-bold hover:text-red-500 transition">
+                                <a href="{% url 'blog_details' post.pk %}">{{ post.title }}</a>
+                            </h3>
+                            <p class="text-sm mt-2 bg-gradient-to-r from-red-600 via-red-400 to-red-200 bg-clip-text text-transparent">
+                                {{ post.created_on.date }} | Tag:
+                                {% for category in post.categories.all %}
+                                    <a href="{% url 'blog_category' category.name %}">{{ category.name }}</a>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endblock %}
+        </div>
+
 
         <footer class="relative w-full py-8">
             <div class="ml-6 md:ml-8 lg:ml-0">
@@ -132,13 +160,15 @@
                     <div class="mb-12 lg:mb-0">
                         <h2 class="md:text-lg mb-4 lg:mb-8 font-bold">Signup For The Latest News</h2>
                         <div class="">
-                            <input type="email" placeholder="Enter Email" aria-label="Email for newsletter" class="w-60 lg:w-44 h-12"/>
-                            <button class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                            <form method='POST' novalidate class='space-y-4'>
+                                {{ form.email|add_class:'mt-1 block w-full border border-gray-300 rounded-md shadow-md p-2 outline-none' }}
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                            </form>
                         </div>
                     </div>
                 </div>                
             </div>
-            <div class='mt-16 lg:mt-32 flex justify-between px-2 lg:px-12 text-xs'>
+            <div class='mt-16 lg:mt-32 flex justify-between px-2 lg:px-8 text-xs'>
                 <h2> Copyright © Elvix Luxe. All Rights Reserved. </h2>
                 <h2><a href="https://github.com/Stephen842" class='text-red-500 font-bold'> PythoGenius </a></h2>
             </div>
@@ -146,5 +176,14 @@
         
         <!--This script is an extension of the themeswitcher for the page bg switching-->
         <script src="{% static 'js/background_switch.js' %}"></script>
+
+        <!--This is to prevent the right clicking of mouse to solely prevent users from downloading images-->
+        <script>
+            document.addEventListener('contextmenu', function (e) {
+                if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                }
+            });
+        </script>
     </body>
 </html>

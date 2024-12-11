@@ -1,0 +1,252 @@
+{% load static %}
+{% load humanize %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv = 'X-UA-Compatible' content = 'IE=edge'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv='content-type' content='text/html; charset = utf-8'/>
+        <meta name = 'robots' content = 'index, follow'>
+
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+        <link rel="icon" sizes="256x256" href="{% static 'favicon/android-chrome-256x256.png' %}">
+        <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+
+        <link rel = 'stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+        <link rel = 'stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Magnolia+Script&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+        
+        <!-- TailwindCSS Compilation -->
+        <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        
+        <title> {{ post.title }}</title>
+    </head>
+
+    <body class="">
+        <main>
+            <!-- Background Image -->
+            <div class="h-screen w-full bg-cover bg-center relative" style="background-image: url(../../static/blog.jpg);">
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-black bg-opacity-70"></div>
+                
+                <!-- Header -->
+                <header class="absolute top-0 w-full">
+                    <div class="px-2 py-2 lg:px-0 lg:py-0">
+                        <!-- Navigation Bar -->
+                        <div class="flex justify-between items-center backdrop-blur-md bg-white opacity-70 rounded-xl p-4 shadow-lg lg:rounded-tl-none lg:rounded-tr-none sticky top-0 z-50">
+                            <!-- Logo -->
+                            <div class="flex -ml-12 lg:-ml-0">
+                                <a href="/" class="flex items-center">
+                                    <!-- Logo Image -->
+                                    <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-20 w-28 object-contain">
+                                    <!-- Brand Name -->
+                                    <span class="text-md lg:text-xl font-magnolia text-gray-800 font-bold -ml-8">
+                                        Elvix Luxe
+                                    </span>
+                                </a>
+                            </div>
+                            
+                            <!-- Navigation Links -->
+                            <nav class="hidden lg:flex mr-2 gap-12 text-gray-800 text-lg font-magnolia">
+                                <a href="/" class="hover:text-gray-400 transition">Shop</a>
+                                <a href="{% url 'blog' %}" class="hover:text-gray-400 transition">Blog</a>
+                                <a href="/gallery" class="hover:text-gray-400 transition">Gallery</a>
+                                <a href="{% url 'contact_us' %}" class="hover:text-gray-400 transition">Contact</a>
+                            </nav>
+    
+                            <div class="hidden lg:flex items-center mr-8 gap-8 text-gray-800 text-lg font-bold">
+                                <a></a>
+                                <a href="#" class="hover:text-gray-400 transition"><i class="bi bi-search"></i></a>
+                                <a href="#" class="hover:text-gray-400 transition"><i class="bi bi-cart"></i></a>
+                                <a href="{% url 'contact_us' %}" class="hover:text-gray-400 transition"><i class="bi bi-telephone"></i></a>
+                                <button id="modeSwitch" class="p-2 w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 transition flex items-center justify-center">
+                                    <i id="themeIcon" class="bi bi-moon-stars"></i>
+                                </button>
+                            </div>
+                            
+            
+                            <!-- Mobile Menu Icon -->
+                            <div class="lg:hidden">
+                                <button class="text-gray-800 focus:outline-none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Text and Images Section -->
+                        <div class="flex items-center justify-center h-screen text-white">
+                            <!-- Text Section -->
+                            <div class="text-center -mt-52">
+                                <h2 class="text-xl font-medium mb-4 lg:mb-8">Insights Styled for You</h2>
+                                <h2 class="text-3xl font-bold">{{ post.title }}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            </div>
+        </main>
+
+        <div class="mt-8 mb-16 lg:mb-24 p-4 font-[poppins]">
+            {% block page_content %}
+                <small class="mb-4 bg-gradient-to-r from-red-600 via-red-400 to-red-200 bg-clip-text text-transparent">
+                    {{ post.created_on.date }} | Categories:
+                    {% for category in post.categories.all %}
+                        <a href="{% url 'blog_category' category.name %}">
+                            {{ category.name }}
+                        </a>
+                    {% endfor %}
+                </small>
+                <div class="flex justify-center w-100 mb-4">
+                    <img src="{{ post.image.url }}" class='w-[72rem] h-100 object-cover'/>
+                </div>
+                <p>{{ post.body | safe | linebreaks }}</p>
+            {% endblock page_content %}
+        </div>
+
+        <div class="mt-8 mb-16 lg:mb-24 p-4 font-[poppins]">
+            <!-- Comment Form Section -->
+            <div class="bg-gray-100 rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold mb-4 text-gray-800">Leave a Comment</h3>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        {{ form.author|add_class:"w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none"|attr:'placeholder: Enter Name' }}
+                    </div>
+                    <div>
+                        {{ form.body|add_class:"w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none"|attr:'placeholder: Enter Comment' }}
+                    </div>
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white rounded-md px-6 py-2 font-medium shadow-md hover:shadow-lg transition duration-300">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        
+            <!-- Comments Section -->
+            {% if comments %}
+                <div class="mt-8">
+                    <h3 class="text-lg font-semibold text-red-500 mb-4">Comments</h3>
+                    <div class="space-y-6">
+                        {% for comment in comments %}
+                            <div class="bg-gray-50 text-gray-800 p-4 rounded-lg shadow-md">
+                                <p class="font-medium"><i class="bi bi-person text-3xl"></i> {{ comment.author }} </p>
+                                <p class="mt-2">
+                                    {{ comment.body | linebreaks }}
+                                </p>
+                                <small class="text-gray-400">{{ comment.created_on.date }}</small>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <div class="mt-8 text-gray-500 italic">No comments yet. Be the first to share your thoughts!</div>
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-8">
+            <h2 class="text-2xl font-bold text-gray-800 tracking-wide border-b-2 border-red-500 inline-block pb-2">
+                Related Posts
+            </h2>
+        </div>
+        <div class="relative mt-8 mb-8">
+            <!-- Carousel Wrapper -->
+            <div class="flex overflow-x-auto space-x-6 pb-4 scrollbar-hide">
+                {% for post in related_posts %}
+                    <div class="flex-none w-64 bg-white shadow-md rounded-lg p-4 transform hover:scale-105 transition-transform duration-300">
+                        <!-- Post Image -->
+                        <a href="{% url 'blog_details' post.pk %}">
+                            <img src="{{ post.image.url }}" class="w-full h-40 lg:h-48 object-cover rounded-md">
+                        </a>
+                        <!-- Post Title -->
+                        <h3 class="mt-4 text-lg font-semibold text-gray-800 hover:text-red-500 transition">
+                            <a href="{% url 'blog_details' post.pk %}">{{ post.title }}</a>
+                        </h3>
+                        <!-- Post Meta -->
+                        <p class="mt-2 text-sm text-gray-600">
+                            {{ post.created_on.date }} 
+                            <span class="font-medium text-red-600">| Tags:</span>
+                            {% for category in post.categories.all %}
+                            <a href="{% url 'blog_category' category.name %}" class="text-red-500 hover:underline">{{ category.name }}</a>{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+
+        <footer class="relative w-full py-8">
+            <div class="ml-6 md:ml-8 lg:ml-0">
+                <div class="grid grid-cols-1 lg:grid-cols-4 justify-evenly items-start gap-4">
+                    <div class="-ml-12 lg:ml-2 lg:-mt-8">
+                        <a href="/" class="flex items-center" aria-label="Homepage">
+                            <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
+                            <span class="text-md lg:text-2xl font-magnolia font-bold -ml-8">
+                                Elvix Luxe
+                            </span>
+                        </a>
+                        <p class="whitespace-pre-line m-12 -mt-12 text-left font-[poppins]">
+                            Redefining style with elegance.
+                            Modern clothing for every occasion.
+                        </p>
+                    </div>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-lg mb-4 lg:mb-8 font-bold">Links</h2>
+                        <ul class="font-bold space-y-4 text-left">
+                            <li><a href="/"><i class="bi bi-arrow-right"></i> Shop</a></li>
+                            <li><a href="{% url 'blog' %}"><i class="bi bi-arrow-right"></i> Blog</a></li>
+                            <li><a href="#"><i class="bi bi-arrow-right"></i> Gallery</a></li>
+                            <li><a href="{% url 'contact_us' %}"><i class="bi bi-arrow-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-lg mb-4 lg:mb-8 font-bold">Contact Us</h2>
+                        <ul class="font-bold space-y-4 text-left">
+                            <li><i class="bi bi-geo-alt"></i> Abuja Nigeria, Africa</li>
+                            <li><i class="bi bi-telephone-inbound"></i> +234 913 031 5165</li>
+                            <li><i class="bi bi-envelope-plus"></i> Elvixluxe@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="md:text-lg mb-4 lg:mb-8 font-bold">Signup For The Latest News</h2>
+                        <div class="">
+                            <form method='POST' novalidate class='space-y-4'>
+                                {{ form.email|add_class:'mt-1 block w-full border border-gray-300 rounded-md shadow-md p-2 outline-none' }}
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                            </form>  
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class='mt-16 lg:mt-32 flex justify-between px-2 lg:px-12 text-xs'>
+                <h2> Copyright © Elvix Luxe. All Rights Reserved. </h2>
+                <h2><a href="https://github.com/Stephen842" class='text-red-500 font-bold'> PythoGenius </a></h2>
+            </div>
+        </footer>
+        
+        <!--This script is an extension of the themeswitcher for the page bg switching-->
+        <script src="{% static 'js/background_switch.js' %}"></script>
+
+        <!--This is to prevent the right clicking of mouse to solely prevent users from downloading images-->
+        <script>
+            document.addEventListener('contextmenu', function (e) {
+                if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                }
+            });
+        </script>
+    </body>
+</html>
+

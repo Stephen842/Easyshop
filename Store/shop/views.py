@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import CommentForm, ContactForm # Import the form
@@ -38,6 +38,9 @@ def blog_category(request, category):
 # For the blog details
 def blog_details(request, pk):
     post = Post.objects.get(pk=pk)
+
+    # Logic for related posts: Get other posts from the same category
+    related_posts = Post.objects.filter(categories__in=post.categories.all()).exclude(id=post.pk)
     
     # Handle comment form submission
     if request.method == 'POST':
@@ -56,6 +59,7 @@ def blog_details(request, pk):
         'post': post,
         'comments': comments,
         'form': form,
+        'related_posts': related_posts,
     }
     return render(request, 'pages/blog_detail.html', context)
 
