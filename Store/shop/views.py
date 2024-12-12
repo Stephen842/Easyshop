@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import CommentForm, ContactForm # Import the form
-from .models import Category, Post, Comment, ContactMail  # and also Import the model
+from .models import Category, Post, Comment, Gallery, ContactMail  # and also Import the model
 
 
 # Create your views here.
@@ -64,7 +64,9 @@ def blog_details(request, pk):
     return render(request, 'pages/blog_detail.html', context)
 
 def gallery(request):
+    media = Gallery.objects.all().order_by('-id')
     context = {
+        'media': media,
         'title': 'The Luxe Wardrobe Showcase',
     }
     return render(request, 'pages/gallery.html', context)

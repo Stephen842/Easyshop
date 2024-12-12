@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 
@@ -38,11 +39,13 @@ class Comment(models.Model):
     
 class Gallery(models.Model):
     image = models.ImageField(upload_to='media/', null=True, blank=True)
-    caption = models.CharField(max_length=60)
+    caption = models.CharField(max_length=60, null=True, blank=True, default="")
+
+    class Meta:
+        verbose_name_plural = 'Galleries'
 
     def __str__(self):
-        return self.caption
-
+        return self.caption if self.caption else "No Caption"
 # For the contact us details
 class ContactMail(models.Model):
     name = models.CharField(max_length = 100)

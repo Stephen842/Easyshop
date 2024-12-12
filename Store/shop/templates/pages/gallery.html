@@ -1,0 +1,168 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv = 'X-UA-Compatible' content = 'IE=edge'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv='content-type' content='text/html; charset = utf-8'/>
+        <meta name = 'robots' content = 'index, follow'>
+
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+        <link rel="icon" sizes="256x256" href="{% static 'favicon/android-chrome-256x256.png' %}">
+        <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+
+        <link rel = 'stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+        <link rel = 'stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Magnolia+Script&display=swap" rel="stylesheet">
+
+        
+        <!-- TailwindCSS Compilation -->
+        <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        
+        <title> {{ title }}</title>
+    </head>
+
+
+    <body>
+        <!-- Header -->
+        <header class="absolute top-0 w-full">
+            <div class="px-2 py-2 lg:px-0 lg:py-0">
+                <!-- Navigation Bar -->
+                <div class="flex justify-between items-center backdrop-blur-md bg-white opacity-70 rounded-xl p-4 shadow-lg lg:rounded-tl-none lg:rounded-tr-none sticky top-0 z-50">
+                    <!-- Logo -->
+                    <div class="flex -ml-12 lg:-ml-0">
+                        <a href="/" class="flex items-center">
+                            <!-- Logo Image -->
+                            <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-20 w-28 object-contain">
+                            <!-- Brand Name -->
+                            <span class="text-md lg:text-xl font-magnolia text-gray-800 font-bold -ml-8">
+                                Elvix Luxe
+                            </span>
+                        </a>
+                    </div>
+                    
+                    <!-- Navigation Links -->
+                    <nav class="hidden lg:flex mr-2 gap-12 text-gray-800 text-lg font-magnolia">
+                        <a href="/" class="hover:text-gray-600 transition">Shop</a>
+                        <a href="{% url 'blog' %}" class="hover:text-gray-600 transition">Blog</a>
+                        <a href="{% url 'gallery' %}" class="hover:text-gray-600 transition">Gallery</a>
+                        <a href = "{% url 'contact_us' %}" class="hover:text-gray-600 transition">Contact</a>
+                    </nav>
+
+                    <div class="hidden lg:flex items-center mr-8 gap-8 text-gray-800 text-lg font-bold">
+                        <a href="#" class="hover:text-gray-600 transition"><i class="bi bi-search"></i></a>
+                        <a href="#" class="hover:text-gray-600 transition"><i class="bi bi-cart"></i></a>
+                        <a href="{% url 'contact_us' %}" class="hover:text-gray-600 transition"><i class="bi bi-telephone"></i></a>
+                        <button id="modeSwitch" class="p-2 w-10 h-10 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-200 transition flex items-center justify-center">
+                            <i id="themeIcon" class="bi bi-moon-stars"></i>
+                        </button>
+                    </div>
+                    
+    
+                    <!-- Mobile Menu Icon -->
+                    <div class="lg:hidden">
+                        <button class="text-gray-800 focus:outline-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="mt-40 mb-16 lg:mb-24 font-serif">
+            <div>
+                <h2 class="font-magnolia text-red-500 text-center text-3xl"> Our Gallery </h2>
+            </div>
+            {% block media %}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {% for pic in media %}
+                    <div class="mt-8 lg:mt-16 p-4 w-full relative group">
+                        <!-- Image Section -->
+                        <div class="relative">
+                            <img src="{{ pic.image.url }}" class="w-full h-full object-cover" alt="Gallery Image"/>
+                        </div>
+                        <!-- Social Icons Section -->
+                        <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center space-x-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <a href="#" class="text-white hover:text-gray-300"><i class="bi bi-facebook text-xl"></i></a>
+                            <a href="#" class="text-white hover:text-gray-300"><i class="bi bi-twitter text-xl"></i></a>
+                            <a href="#" class="text-white hover:text-gray-300"><i class="bi bi-instagram text-xl"></i></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endblock %}
+        </div>
+
+        <footer class="relative w-full py-8">
+            <div class="ml-6 md:ml-8 lg:ml-0">
+                <div class="grid grid-cols-1 lg:grid-cols-4 justify-evenly items-start gap-4">
+                    <div class="-ml-12 lg:ml-2 lg:-mt-8">
+                        <a href="/" class="flex items-center" aria-label="Homepage">
+                            <img src="{% static 'elvix.png' %}" alt="Elvix Logo" class="h-24 w-32 object-contain">
+                            <span class="text-md lg:text-2xl font-magnolia font-bold -ml-8">
+                                Elvix Luxe
+                            </span>
+                        </a>
+                        <p class="whitespace-pre-line m-12 -mt-12 text-left font-[poppins]">
+                            Redefining style with elegance.
+                            Modern clothing for every occasion.
+                        </p>
+                    </div>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-lg mb-4 lg:mb-8 font-bold">Links</h2>
+                        <ul class="font-bold space-y-4 text-left">
+                            <li><a href="/"><i class="bi bi-arrow-right"></i> Shop</a></li>
+                            <li><a href="{% url 'blog' %}"><i class="bi bi-arrow-right"></i> Blog</a></li>
+                            <li><a href="{% url 'gallery' %}"><i class="bi bi-arrow-right"></i> Gallery</a></li>
+                            <li><a href="{% url 'contact_us' %}"><i class="bi bi-arrow-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="text-lg mb-4 lg:mb-8 font-bold">Contact Us</h2>
+                        <ul class="font-bold space-y-4 text-left">
+                            <li><i class="bi bi-geo-alt"></i> Abuja Nigeria, Africa</li>
+                            <li><i class="bi bi-telephone-inbound"></i> +234 913 031 5165</li>
+                            <li><i class="bi bi-envelope-plus"></i> Elvixluxe@gmail.com</li>
+                        </ul>
+                    </div>
+                    <div class="mb-12 lg:mb-0">
+                        <h2 class="md:text-lg mb-4 lg:mb-8 font-bold">Signup For The Latest News</h2>
+                        <div class="">
+                            <form method='POST' novalidate class='space-y-4'>
+                                {{ form.email|add_class:'mt-1 block w-full border border-gray-300 rounded-md shadow-md p-2 outline-none' }}
+                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white rounded-md px-4 py-2 font-medium shadow-md hover:shadow-lg transition mt-4 md:ml-4 lg:mt-0">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class='mt-16 lg:mt-32 flex justify-between px-2 lg:px-12 text-xs'>
+                <h2> Copyright © Elvix Luxe. All Rights Reserved. </h2>
+                <h2><a href="https://github.com/Stephen842" class='text-red-500 font-bold'> PythoGenius </a></h2>
+            </div>
+        </footer>
+
+        <!--This is to prevent the right clicking of mouse to solely prevent users from downloading images-->
+        <script>
+            document.addEventListener('contextmenu', function (e) {
+                if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                }
+            });
+        </script>
+
+        <!--This script is an extension of the themeswitcher for the page bg switching-->
+        <script src="{% static 'js/background_switch.js' %}"></script>
+    </body>    
+</html>
+
