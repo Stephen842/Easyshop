@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import CommentForm, ContactForm # Import the form
+from .forms import CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import Category, Post, Comment, Gallery, ContactMail  # and also Import the model
 
 
@@ -9,17 +9,35 @@ from .models import Category, Post, Comment, Gallery, ContactMail  # and also Im
 
 # For the store homepage
 def home(request):
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
     context = {
         'title': 'Elvix Luxe – Fashion That Inspires Confidence',
+        'newsletter': newsletter,
     }
     return render(request, 'pages/store.html', context)
 
 # For the blog page
 def blog(request):
     posts = Post.objects.all().order_by('-created_on')
+
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
     context = {
         'posts': posts,
         'title': 'Your Style Destination for Fashion Trends and Inspiration',
+        'newsletter': newsletter,
     }
     return render(request, 'pages/blog.html', context)
 
@@ -28,10 +46,20 @@ def blog_category(request, category):
     posts = Post.objects.filter(
         categories__name__contains=category
         ).order_by('-created_on')
+
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
     context = {
         "category": category,
         'posts': posts,
         'title': 'Discover Your Perfect Style',
+        'newsletter': newsletter,
     }
     return render(request, 'pages/category.html', context)
 
@@ -55,19 +83,38 @@ def blog_details(request, pk):
 
     comments = Comment.objects.filter(post=post)
     
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
     context = {
         'post': post,
         'comments': comments,
         'form': form,
         'related_posts': related_posts,
+        'newsletter': newsletter,
     }
     return render(request, 'pages/blog_detail.html', context)
 
 def gallery(request):
     media = Gallery.objects.all().order_by('-id')
+
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
     context = {
         'media': media,
         'title': 'The Luxe Wardrobe Showcase',
+        'newsletter': newsletter,
     }
     return render(request, 'pages/gallery.html', context)
     

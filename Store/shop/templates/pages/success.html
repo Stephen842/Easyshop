@@ -103,7 +103,7 @@
             </div>
         </div>
         <footer class='mt-4 mx-auto'>
-            <h2 class='flex justify-center item-center text-sm text-gray-800 mb-2 font-magnolia'> &copy;Elvix Luxe {% now 'Y'%}</h2>
+            <h2 class='flex justify-center item-center text-sm mb-2 font-magnolia'> &copy;Elvix Luxe {% now 'Y'%}</h2>
         </footer>
 
         <!-- JavaScript for Toggling Sidebar -->
@@ -117,5 +117,8 @@
                 sidebar.classList.toggle('hidden'); // Toggle the 'hidden' class to show/hide the sidebar
             });
         </script>
+
+        <!--This script is an extension of the themeswitcher for the page bg switching-->
+        <script src="{% static 'js/background_switch.js' %}"></script>
     </body>
 </html>

@@ -55,3 +55,12 @@ class ContactMail(models.Model):
 
     def __str__(self):
         return f'Message from {self.name}'
+
+class Newsletter(models.Model):
+    email = models.EmailField(blank=True)
+
+    def __str__(self):
+        if self.email:
+            return self.email
+        else:
+            return 'No email provided'
