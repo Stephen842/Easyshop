@@ -48,15 +48,15 @@
                             </span>
                         </a>
                     </div>
-                    
+                
                     <!-- Navigation Links -->
-                    <nav class="hidden lg:flex mr-2 gap-12 text-gray-800 text-lg font-magnolia">
+                    <nav class="hidden lg:flex lg:mr-2 lg:gap-12 lg:text-gray-800 lg:text-lg font-magnolia">
                         <a href="/" class="hover:text-gray-600 transition">Shop</a>
                         <a href="{% url 'blog' %}" class="hover:text-gray-600 transition">Blog</a>
                         <a href="{% url 'gallery' %}" class="hover:text-gray-600 transition">Gallery</a>
-                        <a href = "{% url 'contact_us' %}" class="hover:text-gray-600 transition">Contact</a>
+                        <a href="{% url 'contact_us' %}" class="hover:text-gray-600 transition">Contact</a>
                     </nav>
-
+                
                     <div class="hidden lg:flex items-center mr-8 gap-8 text-gray-800 text-lg font-bold">
                         <a href="#" class="hover:text-gray-600 transition"><i class="bi bi-search"></i></a>
                         <a href="#" class="hover:text-gray-600 transition"><i class="bi bi-cart"></i></a>
@@ -65,23 +65,32 @@
                             <i id="themeIcon" class="bi bi-moon-stars"></i>
                         </button>
                     </div>
-                    
-    
+                
                     <!-- Mobile Menu Icon -->
                     <div class="lg:hidden">
-                        <button class="text-gray-800 focus:outline-none">
+                        <button id="menuIcon" class="text-gray-800 focus:outline-none">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                             </svg>
                         </button>
                     </div>
                 </div>
+                
+                <!-- Sidebar for Small and Medium Screens -->
+                <div id="sidebar" class="lg:hidden fixed inset-0 bg-gray-800 bg-opacity-100 z-40 hidden transition-all duration-[2000ms] ease-in-out">
+                    <nav class="mt-28 flex flex-col gap-8 p-8 text-white text-lg font-magnolia">
+                        <a href="/" class="transition">Shop</a>
+                        <a href="{% url 'blog' %}" class="transition">Blog</a>
+                        <a href="{% url 'gallery' %}" class="transition">Gallery</a>
+                        <a href="{% url 'contact_us' %}" class="transition">Contact</a>
+                    </nav>
+                </div>
             </div>
         </header>
 
         <div class="mt-40 mb-16 lg:mb-24 font-serif">
             <div>
-                <h2 class="font-magnolia text-red-500 text-center text-3xl"> Our Gallery </h2>
+                <h2 class="font-magnolia text-red-500 text-center text-3xl bg-gradient-to-r from-red-600 via-red-400 to-red-200 bg-clip-text text-transparent"> Our Gallery </h2>
             </div>
             {% block media %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -163,6 +172,18 @@
 
         <!--This script is an extension of the themeswitcher for the page bg switching-->
         <script src="{% static 'js/background_switch.js' %}"></script>
+
+        <!-- JavaScript for Toggling Sidebar -->
+        <script>
+            // Get the menu icon and the sidebar
+            const menuIcon = document.getElementById('menuIcon');
+            const sidebar = document.getElementById('sidebar');
+        
+            // Toggle the sidebar when the menu icon is clicked
+            menuIcon.addEventListener('click', () => {
+                sidebar.classList.toggle('hidden'); // Toggle the 'hidden' class to show/hide the sidebar
+            });
+        </script>
     </body>    
 </html>
 
