@@ -1,9 +1,9 @@
 from django import forms
-from .models import Customer, Order, ContactMail, Comment, Newsletter
+from .models import MyCustomer, Order, ContactMail, Comment, Newsletter
 
 class CustomerForm(forms.ModelForm):
     class Meta:
-        model = Customer
+        model = MyCustomer
         fields = '__all__'
 
     def clean_name(self):
@@ -16,7 +16,7 @@ class CustomerForm(forms.ModelForm):
         email = self.cleaned_data.get('email')
         if len(email) < 8:
             raise forms.ValidationError('Email address must be 8 characters long')
-        if Customer.objects.filter(email=email).exists():
+        if MyCustomer.objects.filter(email=email).exists():
             raise forms.ValidationError('Email Address Already Registered...')
         return email
 

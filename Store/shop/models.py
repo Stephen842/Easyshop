@@ -36,7 +36,7 @@ class CustomerManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class Customer(AbstractBaseUser, PermissionsMixin):  # Add PermissionsMixin here
+class MyCustomer(AbstractBaseUser, PermissionsMixin):  # Add PermissionsMixin here
     name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(unique=True, blank=False)
     phone = models.CharField(max_length=20, blank=False)
@@ -62,16 +62,25 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=50, db_index=True)
+
+    class Meta:
+        verbose_name_plural = 'Product Categories'
+
+    def __str__(self):
+        return self.name
+    
     @staticmethod
     def get_all_categories():
-        return Category.objects.all()
+        return ProductCategory.objects.all()
 
 # For uploading of product
 class Products(models.Model):
     name = models.CharField(max_length=100)
     price = models.CharField(max_length=20, default=0)
     old_price = models.CharField(max_length=20, default=0)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True, blank=True)
     image_0 = models.ImageField(upload_to='media/')
 
     def __str__(self):
@@ -93,12 +102,12 @@ class Products(models.Model):
     @staticmethod
     def get_all_products_by_categoryid(category_id=None):
         if category_id:
-            return Products.objects.filter(category=category_id)
+            return Products.objects.filter(ProductCategory=category_id)
         return Products.get_all_products()
 
 # This is for storing of cart items
 class CartItem(models.Model):
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(MyCustomer, on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
 

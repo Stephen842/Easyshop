@@ -1,0 +1,73 @@
+{% load static %}
+{% load humanize %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv = 'X-UA-Compatible' content = 'IE=edge'>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv='content-type' content='text/html; charset = utf-8'/>
+        <meta name = 'robots' content = 'index, follow'>
+
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+        <link rel="icon" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+        <link rel="icon" sizes="256x256" href="{% static 'favicon/android-chrome-256x256.png' %}">
+        <link rel="icon" type="image/x-icon" href="{% static 'favicon/favicon.ico' %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
+        <link rel="manifest" href="{% static 'favicon/site.webmanifest' %}">
+
+        <link rel = 'stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+        <link rel = 'stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css'>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Magnolia+Script&display=swap" rel="stylesheet">
+
+        
+        <!-- TailwindCSS Compilation -->
+        <link rel="stylesheet" href="{% static 'src/styles.css' %}">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        
+        <title> Sign In and Shop the Luxe Collection </title>
+    </head>
+
+    <body class='h-screen bg-[#FFF5EE]'>
+        <main>
+            <div class="flex items-center justify-center">
+                <div class = 'h-3/4 w-3/4  bg-translucent-gray'>
+                    <div class = 'font-magnolia flex items-center justify-center h-3/4 mt-11'>
+                        <form method = 'POST' class='w-full max-w-md p-8 bg-gray-50 rounded-lg shadow-2xl'>
+                            <div class="flex flex-col items-center justify-center mb-5 h-[30%]">
+                                <img src="{% static 'elvix.png' %}" alt="ElvixLuxe Logo" class="max-w-full h-40">
+                                <h2 class="font-magnolia font-bold text-xl text-gray-800 text-center -mt-12">Elvix Luxe</h2>
+                            </div>
+                            {% csrf_token %}
+                            <div class='mb-8 w-full'>
+                                {{ form.email|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Enter Email' }}
+                            </div>
+                            <div class='mb-8 w-full'>
+                                {{ form.password|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Password' }}
+                            </div>
+                            <div class='font-magnolia flex justify-between text-xs text-red-500 mb-8'>
+                                <p><a href = '#'> Forgotten password </a></p>
+                                <p><a href = "{% url 'signup'%}"> Sign Up </a></p>
+                            </div>
+                            <div class=' flex items-center justify-center mb-5'>
+                                <button type = 'submit' class='bg-red-500 hover:bg-red-600 text-white cursor-pointer py-2 px-4 rounded'> Sign In </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!--This is to prevent the right clicking of mouse to solely prevent users from downloading images-->
+        <script>
+            document.addEventListener('contextmenu', function (e) {
+                if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                }
+            });
+        </script>
+    </body>
+</html>

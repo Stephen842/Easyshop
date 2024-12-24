@@ -58,6 +58,12 @@ MIDDLEWARE = [
     'django_browser_reload.middleware.BrowserReloadMiddleware'
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'shop.BackendAuth.CustomAuthBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+AUTH_USER_MODEL = 'shop.MyCustomer'
+
 ROOT_URLCONF = 'Store.urls'
 
 TEMPLATES = [
@@ -120,6 +126,10 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = '/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/

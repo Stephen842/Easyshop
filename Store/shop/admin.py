@@ -2,7 +2,7 @@ from django.contrib import admin
 from tinymce.widgets import TinyMCE
 from django.db import models
 from django.db.models import Q
-from .models import Customer, Category, Products, Order, Post, Comment, Gallery, ContactMail, Newsletter
+from .models import MyCustomer, Category, ProductCategory, Products, Order, Post, Comment, Gallery, ContactMail, Newsletter
 
 # Register your models here.
 
@@ -24,6 +24,12 @@ class CustomerAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('name',)
+
+    pass
+
+class ProductCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     search_fields = ('name',)
 
@@ -71,8 +77,9 @@ class GalleryAdmin(admin.ModelAdmin):
 class ContactAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Customer, CustomerAdmin)
+admin.site.register(MyCustomer, CustomerAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(ProductCategory, ProductCategoryAdmin)
 admin.site.register(Products, ProductsAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Post, PostAdmin)

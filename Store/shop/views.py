@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Q
 from .forms import CustomerForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
-from .models import Customer, Category, Products, Order, Post, Comment, Gallery, ContactMail  # and also Import the model
+from .models import MyCustomer, Category, ProductCategory, Products, Order, Post, Comment, Gallery, ContactMail  # and also Import the model
 
 # Create your views here.
 
@@ -50,9 +50,9 @@ def Signin(request):
             if user is not None:
                 login(request, user)
                 try:
-                    customer = Customer.objects.get(email=user.email)
+                    customer = MyCustomer.objects.get(email=user.email)
                     request.session['customer'] = customer.id
-                except Customer.DoesNotExist:
+                except MyCustomer.DoesNotExist:
                     return HttpResponse('Customer does not exist for this user')
                 return redirect('homepage')
             else:
@@ -153,7 +153,7 @@ class CheckOut(View):
             return redirect('homepage') #Redirect user to homepage if user is not logged in or there nothing is in the cart
 
         products = Products.get_products_by_id(list(cart.keys()))
-        customer = Customer.objects.get(id=customer_id)
+        customer = MyCustomer.objects.get(id=customer_id)
 
         for product in products:
             quantity = cart.get(str(product.id))
@@ -328,7 +328,7 @@ def search(request):
     date = datetime.now()
     query = request.GET.get('q')
     products = Products.objects.filter(Q(name__icontains=query) | Q(category__name__icontains=query))
-    categories = Category.objects.filter(name__icontains=query)
+    categories = ProductCategory.objects.filter(name__icontains=query)
     
     context = {
         'query': query,
