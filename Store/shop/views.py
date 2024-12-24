@@ -88,10 +88,37 @@ class Index(View):
         return self.get(request)
 
     def get(self, request):
-        return HttpResponseRedirect(f'/home{request.get_full_path()[1:]}')
+        return HttpResponseRedirect(f'/Store{request.get_full_path()[1:]}')
 
 # For the store homepage
 def home(request):
+
+    date = datetime.now()
+    cart = request.session.get('cart')
+
+    if not cart:
+        request.session['cart'] = {}
+
+    products = None
+    categories = ProductCategory.get_all_categories()
+    categoryID = request.GET.get('category')
+
+    if categoryID:
+        #This is to ensure that categoryID is a valid integer
+        try:
+            categoryId = int(categoryID)
+            products = Products.get_all_products_by_categoryid(categoryID)
+        except ValueError:
+            products = Products.get_all_products() #If the CategoryId is invalid, it should display all products
+    else:
+        products = Products.get_all_products()
+
+    data = {
+        'products': products,
+        'categories': categories,
+        'cart': cart,
+    }
+
     # This part is for user's to subscribe to the newsletter found in the footer
     if request.method  == 'POST':
         form = NewsletterForm(request.POST)
@@ -99,8 +126,11 @@ def home(request):
             form.save()
             return render(request, 'pages/success.html')
     newsletter = NewsletterForm()
+
     context = {
         'title': 'Elvix Luxe – Fashion That Inspires Confidence',
+        'data': data,
+        'date': date,
         'newsletter': newsletter,
     }
     return render(request, 'pages/store.html', context)

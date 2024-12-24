@@ -32,40 +32,43 @@
     </head>
 
     <body class='h-screen bg-[#FFF5EE]'>
-        <main>
-            <div class="flex items-center justify-center">
-                <div class = 'h-3/4 w-3/4  bg-translucent-gray'>
-                    <div class = 'font-magnolia flex items-center justify-center h-3/4 mt-4'>
-                        <form method = 'POST' class='w-full max-w-md p-8 bg-gray-50 rounded-lg shadow-2xl'>
-                            <div class="flex flex-col items-center justify-center mb-5 h-[30%]">
-                                <img src="{% static 'elvix.png' %}" alt="ElvixLuxe Logo" class="max-w-full h-40">
-                                <h2 class="font-magnolia font-bold text-xl text-gray-800 text-center -mt-12">Elvix Luxe</h2>
-                            </div>
-                            {% csrf_token %}
-                            <div class='mb-8 w-full'>
-                                {{ form.name|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Enter Full Name' }}
-                            </div>
-                            <div class='mb-8 w-full'>
-                                {{ form.email|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Email' }}
-                            </div>
-                            <div class='mb-8 w-full'>
-                                {{ form.phone|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Phone Number' }}
-                            </div>
-                            <div class='mb-8 w-full'>
-                                {{ form.password|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Password: minimum 8 characters.' }}
-                            </div>
-                            <div class='font-magnolia flex justify-between text-xs text-red-500 mb-8'>
-                                <p><a href = '#'> Forgotten password </a></p>
-                                <p><a href = "{% url 'login'%}"> Sign In </a></p>
-                            </div>
-                            <div class=' flex items-center justify-center mb-5'>
-                                <button type = 'submit' class='bg-red-500 hover:bg-red-600 text-white cursor-pointer py-2 px-4 rounded'> Sign up </button>
-                            </div>
-                        </form>
-                    </div>
+        <main class="flex items-center justify-center min-h-screen">
+            <div class="h-3/4 w-3/4 bg-translucent-gray">
+                <div class="font-magnolia flex items-center justify-center h-3/4 mt-4">
+                    <form method="POST" class="w-full max-w-md p-8 bg-gray-50 rounded-lg shadow-2xl">
+                        <div class="flex flex-col items-center justify-center mb-5 h-[30%]">
+                            <img src="{% static 'elvix.png' %}" alt="ElvixLuxe Logo" class="max-w-full h-40">
+                            <h2 class="font-magnolia font-bold text-xl text-gray-800 text-center mt-12 lg:-mt-12">
+                                Elvix Luxe
+                            </h2>
+                        </div>
+                        {% csrf_token %}
+                        <div class="mb-8 w-full">
+                            {{ form.name|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Enter Full Name' }}
+                        </div>
+                        <div class="mb-8 w-full">
+                            {{ form.email|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Email' }}
+                        </div>
+                        <div class="mb-8 w-full">
+                            {{ form.phone|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Phone Number' }}
+                        </div>
+                        <div class="mb-8 w-full">
+                            {{ form.password|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Password: minimum 8 characters.' }}
+                        </div>
+                        <div class="font-magnolia flex justify-between text-xs text-red-500 mb-8">
+                            <p><a href="#">Forgotten password</a></p>
+                            <p><a href="{% url 'login' %}">Sign In</a></p>
+                        </div>
+                        <div class="flex items-center justify-center mb-5">
+                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white cursor-pointer py-2 px-4 rounded">
+                                Sign up
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </main>
+        
 
         <!--This is to prevent the right clicking of mouse to solely prevent users from downloading images-->
         <script>
