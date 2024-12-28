@@ -65,7 +65,7 @@
                                 <input type="text" name='q' id="search-input" placeholder="Search..." class="w-0 opacity-0 p-0 border-b border-transparent transition-all duration-300 ease-in-out"/>
                             </form>
                         </div>
-                        <a href="#" class="hover:text-gray-600 transition"><i class="bi bi-cart"></i></a>
+                        <a href="{% url 'cart' %}" class="hover:text-gray-600 transition"><i class="bi bi-cart"></i></a>
                         <a class="-mr-8">
                             {% if user.is_authenticated %}
                                 <a class='hover:text-gray-600 transition' href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i></a>

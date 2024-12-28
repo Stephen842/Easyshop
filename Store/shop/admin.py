@@ -2,7 +2,7 @@ from django.contrib import admin
 from tinymce.widgets import TinyMCE
 from django.db import models
 from django.db.models import Q
-from .models import MyCustomer, Category, ProductCategory, Products, Order, Post, Comment, Gallery, ContactMail, Newsletter
+from .models import MyCustomer, Category, ProductCategory, Products, CartItem, Order, Post, Comment, Gallery, ContactMail, Newsletter
 
 # Register your models here.
 
@@ -52,6 +52,11 @@ class ProductsAdmin(admin.ModelAdmin):
             queryset |= self.model.objects.filter(Q(category__name__icontains=search_term))
         return queryset, use_distinct
 
+class CartItemAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'quantity', 'shipping')  # Fields to display in the list view
+    search_fields = ('user__name', 'product__name')  # Enable searching by user name or product name
+    list_filter = ('shipping',)
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'products')
     search_fields = ('id',)  # Only include fields directly on the Order model
@@ -81,6 +86,8 @@ admin.site.register(MyCustomer, CustomerAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(ProductCategory, ProductCategoryAdmin)
 admin.site.register(Products, ProductsAdmin)
+#admin.site.register(Cart, CartAdmin)
+admin.site.register(CartItem, CartItemAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)

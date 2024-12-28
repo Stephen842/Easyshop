@@ -1,5 +1,5 @@
 from django import forms
-from .models import MyCustomer, Order, ContactMail, Comment, Newsletter
+from .models import MyCustomer, Order, CartItem, ContactMail, Comment, Newsletter
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -41,6 +41,10 @@ class OrderForm(forms.ModelForm):
         model = Order
         fields = '__all__'
 
+class CartItemForm(forms.ModelForm):
+    class Meta:
+        model = CartItem
+        fields = ['shipping']
 class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMail

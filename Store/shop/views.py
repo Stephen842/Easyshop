@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect 
+from django.shortcuts import render, redirect, get_object_or_404 
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
@@ -10,8 +10,11 @@ from django.contrib.auth import login, authenticate, logout as auth_logout
 from django.http import HttpResponse
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Q
-from .forms import CustomerForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
-from .models import MyCustomer, Category, ProductCategory, Products, Order, Post, Comment, Gallery, ContactMail  # and also Import the model
+from django.http import JsonResponse, HttpResponseRedirect
+from django.urls import reverse
+from django.contrib import messages
+from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
+from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
 # Create your views here.
 
@@ -67,38 +70,55 @@ def logout(request):
 
 class Index(View):
     def post(self, request):
+        user = request.user
         product_id = request.POST.get('product')
         remove = request.POST.get('remove')
-        cart = request.session.get('cart', {})
 
-        if product_id:
-            quantity = cart.get(product_id, 0)
-            if remove:
-                if quantity <= 1:
-                    cart.pop(product_id, None)
-                else:
-                    cart[product_id] = quantity - 1
+        if not user.is_authenticated:
+            # Redirect to login if user is not authenticated
+            return redirect(f"{reverse('login')}?next={request.path}")
+        
+        # Get the product
+        product = get_object_or_404(Products, id=product_id)
+
+        # Check if the product is already in the cart for the user
+        cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
+
+        if remove:
+            if cart_item.quantity <= 1:
+                cart_item.delete()
             else:
-                cart[product_id] = quantity + 1
+                cart_item.quantity -= 1
+                cart_item.save()
+        else:
+            cart_item.quantity += 1
+            cart_item.save()
 
-        request.session['cart'] = cart
-        print('cart', request.session['cart'])
+        # Optionally, synchronize the session cart data (e.g., product IDs and quantities) for future reference
+        cart_items = CartItem.objects.filter(user=user)
+        session_cart = {}
+        for item in cart_items:
+            session_cart[item.product.id] = item.quantity
 
-        # I updated this below to render the same page with updated context instead of redirecting to the homepage
-        return self.get(request)
-
+        request.session['cart'] = session_cart  # Update session with the current cart state
+        
+        return redirect('Store/')
+        
     def get(self, request):
+        # Redirect to the store or render a response as per your application
         return HttpResponseRedirect(f'/Store{request.get_full_path()[1:]}')
 
 # For the store homepage
 def home(request):
 
     date = datetime.now()
-    cart = request.session.get('cart')
 
-    if not cart:
-        request.session['cart'] = {}
-
+    # Fetch the user's cart items directly from CartItem model
+    if request.user.is_authenticated:
+        cart_items = CartItem.objects.filter(user=request.user)
+    else:
+        cart_items = []
+        
     products = None
     categories = ProductCategory.get_all_categories()
     categoryID = request.GET.get('category')
@@ -116,10 +136,10 @@ def home(request):
     data = {
         'products': products,
         'categories': categories,
-        'cart': cart,
+        'cart': cart_items, # Pass the cart items fetched from the database
     }
 
-    # This part is for user's to subscribe to the newsletter found in the footer
+    # Newsletter subscription form
     if request.method  == 'POST':
         form = NewsletterForm(request.POST)
         if form.is_valid():
@@ -140,67 +160,144 @@ def home(request):
 class Cart(View):
     def get(self, request):
         date = datetime.now()
-        cart = request.session.get('cart', {})
-        product_ids = list(cart.keys())
-        products = Products.objects.filter(id__in=product_ids)
 
-        cart_items = []
-        for product in products:
-            quantity = cart[str(product.id)]
-            total_price = int(product.price.replace(',', '')) * quantity
-            cart_items.append({
-                'product': product,
-                'quantity': quantity,
-                'total_price': total_price, 
+        # Fetch cart items from the database
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        # Initialize total_product
+        total_product = 0
+
+        # Prepare cart items
+        cart_details = []
+        for item in cart_items:
+            total_price = int(item.product.price.replace(',', '')) * item.quantity
+            total_product += total_price  # Accumulate the total value of all products
+            cart_details.append({
+                'product': item.product,
+                'quantity': item.quantity,
+                'total_price': total_price,
+                'total_product': total_product,
             })
 
         context = {
-                'title': 'Your Cart',
-                'cart_items': cart_items,
+                'title': 'Your Shopping Cart',
+                'cart_items': cart_details,
+                'total_product': total_product,
                 'date': date,
+                'form': CartItemForm(),
         }
 
+        return render(request, 'pages/cart.html', context)
+    
+    def post(self, request):
+        # Handle form submission
+        form = CartItemForm(request.POST)
+        if form.is_valid():
+            # Save the cart item to the database
+            cart_item = form.save(commit=False)
+            cart_item.user = request.user  # Associate the cart item with the logged-in user
+            cart_item.save()
+
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        # Initialize total_product
+        total_product = 0
+
+        # Shipping cost mapping
+        shipping_costs = {
+            'standard': 1,
+            'express': 3,
+            'same_day': 5,
+            'pickup': 0,
+        }
+
+        # Prepare cart items
+        cart_details = []
+        for item in cart_items:
+            total_price = int(item.product.price.replace(',', '')) * item.quantity
+            total_product += total_price  # Accumulate the total value of all products
+            cart_details.append({
+                'product': item.product,
+                'quantity': item.quantity,
+                'total_price': total_price,
+                'total_product': total_product,
+            })
+
+
+        # This part is for user's to subscribe to the newsletter found in the footer
+        if request.method  == 'POST':
+            form = NewsletterForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return render(request, 'pages/success.html')
+        newsletter = NewsletterForm()
+
+
+        context = {
+            'title': 'Your Shopping Cart',
+            'cart_items': cart_details,
+            'total_product': total_product,
+            #'final_product_price': final_product_price,
+            'date': datetime.now(),
+            'form': form,
+            'newsletter': newsletter,
+        }
         return render(request, 'pages/cart.html', context)
 
 # For the order checkout page
 @method_decorator(login_required, name='dispatch')
 class CheckOut(View):
     def get(self, request):
-        #If request is GET it should render the checkout form
+        # If request is GET it should render the checkout form
         return render(request, 'pages/checkout.html')
 
     def post(self, request):
-        #To process checkout form
+        # To process checkout form
         address = request.POST.get('address')
         phone = request.POST.get('phone')
 
-        # Get the customer_id from the session
-        customer_id = request.session.get('customer')
+        if not address or not phone:
+            messages.error(request, "Address and phone are required.")
+            return redirect('checkout')  # Redirect back to checkout if inputs are invalid
 
-        cart = request.session.get('cart')
+        # Get the authenticated user
+        customer = request.user
 
-        if not customer_id or not cart:
-            return redirect('homepage') #Redirect user to homepage if user is not logged in or there nothing is in the cart
+        # Get cart data from the database
+        cart_items = CartItem.objects.filter(user=request.user)
+        if not cart_items.exists():
+            messages.error(request, "Your cart is empty.")
+            return redirect('homepage')
 
-        products = Products.get_products_by_id(list(cart.keys()))
-        customer = MyCustomer.objects.get(id=customer_id)
 
-        for product in products:
-            quantity = cart.get(str(product.id))
-            total_price = int(product.price.replace(',', '')) * quantity
+        try:
+            # Prepare orders for bulk creation
+            orders = []
 
-            order = Order(
-                        customer = customer,
-                        products = product,
-                        price = total_price,
-                        address = address,
-                        phone = phone,
-                        quantity = quantity
-                    )
-            order.save()
-        request.session['cart'] = {}
+            for cart_item in cart_items:
+                orders.append(Order(
+                    customer=customer,
+                    product=cart_item.product,
+                    price=cart_item.total_price(),
+                    address=address,
+                    phone=phone,
+                    quantity=cart_item.quantity,
+                ))
+                
+            # Save all orders in a single query
+            Order.objects.bulk_create(orders)
 
-        return redirect('order-confirm')
+            # Clear cart items after checkout
+            cart_items.delete()
+
+            messages.success(request, "Order placed successfully!")
+            return redirect('order-confirm')
+
+        except Exception as e:
+            # Log the error for debugging
+            print(f"Error during checkout: {e}")
+            messages.error(request, "Something went wrong during checkout. Please try again.")
+            return redirect('checkout')
 
 # For the viewing of all orders that have been placed successfully by a user
 @method_decorator(login_required, name='dispatch')

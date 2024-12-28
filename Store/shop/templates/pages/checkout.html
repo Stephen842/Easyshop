@@ -66,7 +66,7 @@
                                 <input type="text" name="q" id="search-input" placeholder="Search..." class="w-0 opacity-0 p-0 border-b border-transparent transition-all duration-300 ease-in-out"/>
                             </form>
                         </div>
-                        <a href="#" class="hover:text-gray-600 transition"><i class="bi bi-cart"></i></a>
+                        <a href="{% url 'cart' %}" class="hover:text-gray-600 transition"><i class="bi bi-cart"></i></a>
                         <a class="-mr-8">
                             {% if user.is_authenticated %}
                                 <a class="hover:text-gray-600 transition" href="{% url 'logout' %}"><i class="bi bi-box-arrow-in-left"></i></a>
@@ -115,6 +115,15 @@
                 <h2 class="m-2"> Contact Information </h2>
                 <h2 class="m-2 text-xs text-red-500"> We have your details; we just need your address and phone number to reach you for delivery. </h2>
             </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} text-red-800 m-2">
+                    {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             <form method="post" action="{% url 'checkout' %}" class="m-4">
                 {% csrf_token %}
                 <div class="mb-4">

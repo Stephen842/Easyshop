@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from PIL import Image
 import datetime
 from django.utils import timezone
@@ -78,6 +79,9 @@ class ProductCategory(models.Model):
 # For uploading of product
 class Products(models.Model):
     name = models.CharField(max_length=100)
+    description = models.CharField(max_length=200, blank=True)
+    color = models.CharField(max_length=20, blank=True)
+    size = models.CharField(max_length=20, blank=True)
     price = models.CharField(max_length=20, default=0)
     old_price = models.CharField(max_length=20, default=0)
     category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True, blank=True)
@@ -105,15 +109,24 @@ class Products(models.Model):
             return Products.objects.filter(ProductCategory=category_id)
         return Products.get_all_products()
 
-# This is for storing of cart items
 class CartItem(models.Model):
-    user = models.ForeignKey(MyCustomer, on_delete=models.CASCADE, null=True, blank=True)
+    user = models.ForeignKey(MyCustomer, on_delete=models.CASCADE, null=True, blank=True, related_name="cart_items")
     product = models.ForeignKey(Products, on_delete=models.CASCADE, null=True, blank=True)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=0)
+    shipping = models.CharField(
+        max_length=100,
+        choices=[
+            ('standard', 'Standard Delivery - $1 (3-5 business days)'),
+            ('express', 'Express Delivery - $3 (1-2 business days)'),
+            ('same_day', 'Same-Day Delivery - $5 (Order by 12 PM)'),
+            ('pickup', 'In-Store Pickup - Free'),
+        ],
+        default='standard'
+    )
 
     def __str__(self):
-        return f"{self.product.name} ({self.quantity})"
-
+        return f"Cart for {self.user} {self.product} (x{self.quantity}) - {self.get_shipping_display() if self.user else 'No user'}"
+    
 #This is for the order model, where users fill the neccessary products they are ordering for and then the orders are been submitted
 class Order(models.Model):
     products = models.ForeignKey(Products, on_delete=models.CASCADE)
