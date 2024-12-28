@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
+from django.db import transaction
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -185,6 +186,7 @@ class Cart(View):
                 'total_product': total_product,
                 'date': date,
                 'form': CartItemForm(),
+                'newsletter': NewsletterForm()
         }
 
         return render(request, 'pages/cart.html', context)
@@ -248,6 +250,10 @@ class Cart(View):
 @method_decorator(login_required, name='dispatch')
 class CheckOut(View):
     def get(self, request):
+        context={
+            'title': 'Order Confirmation',
+            'newsletter': NewsletterForm(),
+        }
         # If request is GET it should render the checkout form
         return render(request, 'pages/checkout.html')
 
@@ -271,28 +277,27 @@ class CheckOut(View):
 
 
         try:
-            # Prepare orders for bulk creation
-            orders = []
+           with transaction.atomic():
+                # Prepare orders for bulk creation
+                orders = [
+                    Order(
+                        customer=customer,
+                        products=cart_item.product,
+                        price=cart_item.total_price(),
+                        address=address,
+                        phone=phone,
+                        quantity=cart_item.quantity,
+                    )
+                    for cart_item in cart_items
+                ]
+                # Save all orders
+                Order.objects.bulk_create(orders)
 
-            for cart_item in cart_items:
-                orders.append(Order(
-                    customer=customer,
-                    product=cart_item.product,
-                    price=cart_item.total_price(),
-                    address=address,
-                    phone=phone,
-                    quantity=cart_item.quantity,
-                ))
-                
-            # Save all orders in a single query
-            Order.objects.bulk_create(orders)
+                # Clear cart items
+                cart_items.delete()
 
-            # Clear cart items after checkout
-            cart_items.delete()
-
-            messages.success(request, "Order placed successfully!")
-            return redirect('order-confirm')
-
+                messages.success(request, "Order placed successfully!")
+                return redirect('order-confirm')
         except Exception as e:
             # Log the error for debugging
             print(f"Error during checkout: {e}")
@@ -303,23 +308,52 @@ class CheckOut(View):
 @method_decorator(login_required, name='dispatch')
 class OrderView(View):
     def get(self, request):
-        date = datetime.now()
-        customer_id = request.session.get('customer')
-        orders = Order.get_orders_by_customer(customer_id)
-        print(orders)
+
+        # Get orders directly from the database linked to the logged-in user
+        orders = Order.objects.filter(customer=request.user).order_by('-id')
+
+        if not orders.exists():
+            messages.info(request, "You have no orders yet.")
+
+        # Calculate subtotal by summing all the prices
+        subtotal = sum(order.price for order in orders)
+
+        shipping_cost = 3 
+        total = subtotal + shipping_cost
+
+        # This part is for user's to subscribe to the newsletter found in the footer
+        if request.method  == 'POST':
+            form = NewsletterForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return render(request, 'pages/success.html')
+        newsletter = NewsletterForm()
+
+
         context = {
                 'orders': orders,
                 'title': 'Your Purchase Summary',
-                'date': date,
+                'newsletter': newsletter,
+                'subtotal': subtotal,
+                'shipping_cost': shipping_cost,
+                'total': total,
+
         }
         return render(request, 'pages/orders.html', context)
 
 @login_required
 def order_confirm(request):
-    shop_url = reverse('home')
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
     context = {
         'title': 'Order Placed Successfully',
-        'shop_url': shop_url
+        'newsletter': newsletter,
     }
     return render(request, 'pages/order_confirm.html', context)
 
@@ -456,12 +490,21 @@ def search(request):
     query = request.GET.get('q')
     products = Products.objects.filter(Q(name__icontains=query) | Q(category__name__icontains=query))
     categories = ProductCategory.objects.filter(name__icontains=query)
+
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
     
     context = {
         'query': query,
         'products': products,
         'categories': categories,
         'date': date,
+        'newsletter': newsletter,
     }
     return render(request, 'pages/search_results.html', context)
 
@@ -473,7 +516,16 @@ def message_sent(request):
     return render(request, 'pages/success.html', context)
 
 def error_404(request):
-    context ={
-            'title': 'Oops! Page Not Found'
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
+    context = {
+        'title': 'Oops! Page Not Found',
+        'newsletter': newsletter,
     }
     return render(request, 'pages/404.html', context)

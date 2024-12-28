@@ -124,11 +124,16 @@ class CartItem(models.Model):
         default='standard'
     )
 
+    def total_price(self):
+        # Assuming product price is stored as a string with commas
+        return int(self.product.price.replace(',', '')) * self.quantity
+
     def __str__(self):
         return f"Cart for {self.user} {self.product} (x{self.quantity}) - {self.get_shipping_display() if self.user else 'No user'}"
     
 #This is for the order model, where users fill the neccessary products they are ordering for and then the orders are been submitted
 class Order(models.Model):
+    customer = models.ForeignKey(MyCustomer, on_delete=models.CASCADE, null=True, blank=True)
     products = models.ForeignKey(Products, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
