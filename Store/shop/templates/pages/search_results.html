@@ -116,13 +116,42 @@
             </div>
         </header>
 
-        <div class="flex items-center justify-center min-h-screen">
-            <div class="text-center">
-                <h1 class='mb-2 text-2xl'> Order Confirmation</h1>
-                <p class='mb-4'>Thank you for shopping with Elvix Luxe! Your order has been successfully placed.</p>
-                <div class="flex items-center justify-center mb-2">
-                    <a href="{% url 'orders' %}"><button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-magnolia cursor-pointer py-2 px-4 rounded">Review Your Orders</button></a>
-                </div>
+        <div class="mt-36 mb-16">
+            <h1 class='text-xl text-red-500 mt-8 mb-12 pl-4 font-bold'>Search Results for {{ query }}</h1>
+            <div class="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-2 lg:mx-4 text-lg lg:text-2xl font-bold">
+                {% for product in products %}
+                    <div class="text-center">
+                        <div class="relative group">
+                            <div>
+                                <img src='{{ product.image_0.url }}' alt="Elvix shirt" class="w-full h-auto object-cover rounded-lg shadow-md"/>
+                            </div>
+                            <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center space-x-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <!-- Remove from Cart Form -->
+                                <form method="post" action="{% url 'homepage' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{ product.id }}">
+                                    <input type="hidden" name="remove" value="1">
+                                    <button type="submit" class="text-gray-800 text-xl font-bold py-2 px-4 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"> - </button>
+                                </form>
+
+                                <form method="post" action="{% url 'homepage' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product" value="{{ product.id }}">
+                                    <button type="submit" class="text-gray-800 text-xl font-bold py-2 px-4 bg-white rounded-full shadow-md hover:bg-gray-100 transition duration-300"> + </button>
+                                </form>
+                            </div>
+                        </div>
+                        <h2 class="mt-4 mb-2">{{ product.name }}</h2>
+                        <h2>
+                            <span class="line-through">${{ product.old_price }}</span>
+                            <span class="text-red-500">&nbsp;&nbsp;${{ product.price }}</span>
+                        </h2>
+                    </div>
+                    {% empty %}
+                        <div class="w-full mx-auto text-center">
+                            <h2>No products found.</h2>
+                        </div>
+                {% endfor %}
             </div>
         </div>
 

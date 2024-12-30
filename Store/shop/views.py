@@ -14,6 +14,8 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.db import transaction
+import random
+import string
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -166,24 +168,31 @@ class Cart(View):
         cart_items = CartItem.objects.filter(user=request.user)
 
         # Initialize total_product
-        total_product = 0
+        subtotal = 0
+
+        shipping_cost = 1 
+
+        total = 0
 
         # Prepare cart items
         cart_details = []
         for item in cart_items:
             total_price = int(item.product.price.replace(',', '')) * item.quantity
-            total_product += total_price  # Accumulate the total value of all products
+            subtotal += total_price  # Accumulate the total value of all products
+            total = subtotal + shipping_cost
             cart_details.append({
                 'product': item.product,
                 'quantity': item.quantity,
                 'total_price': total_price,
-                'total_product': total_product,
+                'subtotal': subtotal,
+                'total': total,
             })
 
         context = {
                 'title': 'Your Shopping Cart',
                 'cart_items': cart_details,
-                'total_product': total_product,
+                'subtotal': subtotal,
+                'total': total,
                 'date': date,
                 'form': CartItemForm(),
                 'newsletter': NewsletterForm()
@@ -204,14 +213,6 @@ class Cart(View):
 
         # Initialize total_product
         total_product = 0
-
-        # Shipping cost mapping
-        shipping_costs = {
-            'standard': 1,
-            'express': 3,
-            'same_day': 5,
-            'pickup': 0,
-        }
 
         # Prepare cart items
         cart_details = []
@@ -303,6 +304,7 @@ class CheckOut(View):
             print(f"Error during checkout: {e}")
             messages.error(request, "Something went wrong during checkout. Please try again.")
             return redirect('checkout')
+        
 
 # For the viewing of all orders that have been placed successfully by a user
 @method_decorator(login_required, name='dispatch')
@@ -318,7 +320,7 @@ class OrderView(View):
         # Calculate subtotal by summing all the prices
         subtotal = sum(order.price for order in orders)
 
-        shipping_cost = 3 
+        shipping_cost = 1 
         total = subtotal + shipping_cost
 
         # This part is for user's to subscribe to the newsletter found in the footer

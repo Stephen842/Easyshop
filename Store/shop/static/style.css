@@ -42,7 +42,7 @@ body {
 }
 
 .min-w-max {
-    animation: moveContainer 15s linear infinite; /* Adjust the duration for speed */
+    animation: moveContainer 30s linear infinite; /* Adjust the duration for speed */
     white-space: nowrap; /* Prevent wrapping of the content */
 }
 

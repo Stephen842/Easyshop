@@ -4,6 +4,10 @@ from PIL import Image
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+import uuid
+
+# This will be used later for the Order model = order_id = models.CharField(max_length=20, unique=True, null=True, default=uuid.uuid4().hex[:10].upper())
+# Change the Product category to ManyToManyField for the product categories - categories = models.ManyToManyField(ProductCategory, related_name="products")
 
 # Create your models here.
 
@@ -106,7 +110,7 @@ class Products(models.Model):
     @staticmethod
     def get_all_products_by_categoryid(category_id=None):
         if category_id:
-            return Products.objects.filter(ProductCategory=category_id)
+            return Products.objects.filter(category=category_id)
         return Products.get_all_products()
 
 class CartItem(models.Model):
@@ -117,9 +121,6 @@ class CartItem(models.Model):
         max_length=100,
         choices=[
             ('standard', 'Standard Delivery - $1 (3-5 business days)'),
-            ('express', 'Express Delivery - $3 (1-2 business days)'),
-            ('same_day', 'Same-Day Delivery - $5 (Order by 12 PM)'),
-            ('pickup', 'In-Store Pickup - Free'),
         ],
         default='standard'
     )
