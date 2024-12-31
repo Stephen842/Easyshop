@@ -115,6 +115,7 @@ class Index(View):
 def home(request):
 
     date = datetime.now()
+    posts = Post.objects.all().order_by('-created_on')[:5]
 
     # Fetch the user's cart items directly from CartItem model
     if request.user.is_authenticated:
@@ -152,6 +153,7 @@ def home(request):
 
     context = {
         'title': 'Elvix Luxe – Fashion That Inspires Confidence',
+        'posts': posts,
         'data': data,
         'date': date,
         'newsletter': newsletter,
