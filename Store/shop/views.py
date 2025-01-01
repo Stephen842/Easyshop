@@ -14,8 +14,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
 from django.db import transaction
-import random
-import string
+import uuid
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -258,7 +257,7 @@ class CheckOut(View):
             'newsletter': NewsletterForm(),
         }
         # If request is GET it should render the checkout form
-        return render(request, 'pages/checkout.html')
+        return render(request, 'pages/checkout.html', context)
 
     def post(self, request):
         # To process checkout form
@@ -290,6 +289,7 @@ class CheckOut(View):
                         address=address,
                         phone=phone,
                         quantity=cart_item.quantity,
+                        order_id=uuid.uuid4().hex[:10].upper()  # Generate a unique order_id for each order
                     )
                     for cart_item in cart_items
                 ]

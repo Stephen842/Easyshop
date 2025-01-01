@@ -4,9 +4,7 @@ from PIL import Image
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
-import uuid
 
-# This will be used later for the Order model = order_id = models.CharField(max_length=20, unique=True, null=True, default=uuid.uuid4().hex[:10].upper())
 # Change the Product category to ManyToManyField for the product categories - categories = models.ManyToManyField(ProductCategory, related_name="products")
 
 # Create your models here.
@@ -136,6 +134,7 @@ class CartItem(models.Model):
 class Order(models.Model):
     customer = models.ForeignKey(MyCustomer, on_delete=models.CASCADE, null=True, blank=True)
     products = models.ForeignKey(Products, on_delete=models.CASCADE)
+    order_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
     address = models.CharField(max_length=400, blank=False)
