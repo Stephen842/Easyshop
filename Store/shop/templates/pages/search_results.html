@@ -111,6 +111,13 @@
                         <a href="{% url 'blog' %}" class="transition">Blog</a>
                         <a href="{% url 'gallery' %}" class="transition">Gallery</a>
                         <a href="{% url 'contact_us' %}" class="transition">Contact</a>
+                        <a class="transition -mt-8">
+                            {% if user.is_authenticated %}
+                                <a class='transition' href="{% url 'logout' %}">Logout</a>
+                            {% else %}
+                                <a class='transition' href="{% url 'login' %}">Login</a>
+                            {% endif %}
+                        </a>
                     </nav>
                 </div>
             </div>
