@@ -6,6 +6,13 @@ class CustomerForm(forms.ModelForm):
         model = MyCustomer
         fields = '__all__'
 
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone': forms.NumberInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+        }
+
     def clean_name(self):
         name = self.cleaned_data.get('name')
         if len(name) < 8:
@@ -34,7 +41,7 @@ class CustomerForm(forms.ModelForm):
     
 class SigninForm(forms.Form):
     email = forms.EmailField()
-    password = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 class OrderForm(forms.ModelForm):
     class Meta:

@@ -58,10 +58,11 @@ def Signin(request):
                     customer = MyCustomer.objects.get(email=user.email)
                     request.session['customer'] = customer.id
                 except MyCustomer.DoesNotExist:
-                    return HttpResponse('Customer does not exist for this user')
+                    messages.error(request, 'Customer does not exist for this user.')
+                    return render(request, 'pages/signin.html', {'form': form})
                 return redirect('homepage')
             else:
-                return HttpResponse('Invalid login')
+                messages.error(request, 'Invalid email or password.')
         return render(request, 'pages/signin.html', {'form': form})
 
 

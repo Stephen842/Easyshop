@@ -40,6 +40,17 @@
                             <img src="{% static 'elvix.png' %}" alt="ElvixLuxe Logo" class="max-w-full h-40">
                             <h2 class="font-magnolia font-bold text-xl text-gray-800 text-center -mt-12">Elvix Luxe</h2>
                         </div>
+                        
+                        {% if messages %}
+                            <div class="text-center text-red-500 font-bold mb-4">
+                                {% for message in messages %}
+                                    <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                                        <p>{{ message }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
                         {% csrf_token %}
                         <div class="mb-8 w-full">
                             {{ form.email|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Enter Email' }}

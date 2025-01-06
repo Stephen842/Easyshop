@@ -43,6 +43,17 @@
                             </h2>
                         </div>
                         {% csrf_token %}
+                        {% for field in form %}
+                            <div class="text-center text-red-500 font-bold mb-4">
+                                {% if field.errors %}
+                                    <div>
+                                        {% for error in field.errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
                         <div class="mb-8 w-full">
                             {{ form.name|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Enter Full Name' }}
                         </div>
