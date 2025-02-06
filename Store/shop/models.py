@@ -140,7 +140,7 @@ class Order(models.Model):
     address = models.CharField(max_length=400, blank=False)
     phone = models.CharField(max_length=30, blank=False)
     date = models.DateField(default=datetime.datetime.today)
-    status = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
 
     def placeOrder(self):
         self.save()

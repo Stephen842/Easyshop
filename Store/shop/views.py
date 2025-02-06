@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout as auth_logout
-from django.http import HttpResponse
+from django.http import HttpResponse, JSONResponse
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect
@@ -15,8 +15,11 @@ from django.urls import reverse
 from django.contrib import messages
 from django.db import transaction
 import uuid
+import stripe
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
+
+stripe.api_key = settings.DJSTRIPE_SECRET_KEY # For payment method - stripe
 
 # Create your views here.
 
@@ -203,7 +206,7 @@ class Cart(View):
         return render(request, 'pages/cart.html', context)
     
     def post(self, request):
-        # Handle form submission
+        # Handle Adding item to cart
         form = CartItemForm(request.POST)
         if form.is_valid():
             # Save the cart item to the database
@@ -255,6 +258,7 @@ class CheckOut(View):
     def get(self, request):
         context={
             'title': 'Order Confirmation',
+            'stripe_public_key': settings.DJSTRIPE_PUBLIC_KEY,
             'newsletter': NewsletterForm(),
         }
         # If request is GET it should render the checkout form
@@ -278,33 +282,51 @@ class CheckOut(View):
             messages.error(request, "Your cart is empty.")
             return redirect('homepage')
 
+        order = Order.objects.create(
+            customer=customer,
+            products=cart_item.product,
+            price=cart_item.total_price(),
+            address=address,
+            phone=phone,
+            quantity=cart_item.quantity,
+            order_id=uuid.uuid4().hex[:10].upper()  # Generate a unique order_id for each order
+            paid=False
+        )
+
+        # This is to prepare Stripe session
+        line_items = [
+            {
+                'price_data':{
+                    'currency': 'usd',
+                    'product_data':{
+                        'name': cart_items.product.name,
+                    },
+                    'unit_amount': int(cart_items.total_price*100),
+                }
+                'quantity': cart_items.quantity,
+            }
+        ]
 
         try:
-           with transaction.atomic():
-                # Prepare orders for bulk creation
-                orders = [
-                    Order(
-                        customer=customer,
-                        products=cart_item.product,
-                        price=cart_item.total_price(),
-                        address=address,
-                        phone=phone,
-                        quantity=cart_item.quantity,
-                        order_id=uuid.uuid4().hex[:10].upper()  # Generate a unique order_id for each order
-                    )
-                    for cart_item in cart_items
-                ]
-                # Save all orders
-                Order.objects.bulk_create(orders)
+            session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=line_items,
+                mode='payment',
+                success_url=request.build_absolute_uri(reverse('order-confirm')) + f'?session_id={{CHECKOUT_SESSION_ID}}',
+                cancel_url=request.build_absolute_uri(reverse('order-failed')),
+                metadata={'order_id':order.order_id}
+            )
 
-                # Clear cart items
-                cart_items.delete()
+            # Save the stripe session ID for tracking payment
+            order.stripe_session_id = session.id
+            order.save()
 
-                messages.success(request, "Order placed successfully!")
-                return redirect('order-confirm')
+            # Clear the cart
+            cart_items.delete()
+
+            messages.success(request, "Order placed successfully!")
+            return redirect(session.url)
         except Exception as e:
-            # Log the error for debugging
-            print(f"Error during checkout: {e}")
             messages.error(request, "Something went wrong during checkout. Please try again.")
             return redirect('checkout')
         
@@ -361,6 +383,23 @@ def order_confirm(request):
         'newsletter': newsletter,
     }
     return render(request, 'pages/order_confirm.html', context)
+
+@login_required
+def order_failed(request):
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
+    context = {
+        'title': 'Order Failed To Process',
+        'newsletter': newsletter,
+    }
+    
+    return render(request, 'pages/order_cancel.html', context)
 
 # For the blog page
 def blog(request):

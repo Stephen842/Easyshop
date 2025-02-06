@@ -12,6 +12,7 @@ urlpatterns = [
     path('checkout/', CheckOut.as_view(), name='checkout'),
     path('orders/', OrderView.as_view(), name='orders'),
     path('order-confirm/', views.order_confirm, name='order-confirm'),
+    path('order-failed/', views.order_failed, name='order-failed'),
     path('blog/', views.blog, name='blog'),
     path('post/<int:pk>/', views.blog_details, name='blog_details'),
     path('category/<category>/', views.blog_category, name='blog_category'),
