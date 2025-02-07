@@ -163,16 +163,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #this part is for the sending of email using Gmail as the SMTP provider.
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.get('EMAIL_HOST_USER') # For security purpose saved in .env
-EMAIL_HOST_PASSWORD = os.get('EMAIL_HOST_PASSWORD') # For security purpose saved in .env
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') # For security purpose saved in .env
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # For security purpose saved in .env
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = os.get('EMAIL_HOST_USER')
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # This part for the integration of payment method(Stripe)
 
-DJSTRIPE_PUBLIC_KEY = os.get('STRIPE_PUBLIC_KEY') 
-DJSTRIPE_SECRET_KEY = os.get('STRIPE_SECRET_KEY')
+DJSTRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY') 
+DJSTRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 DJSTRIPE_LIVE_MODE = False # Change when going live
-DJSTRIPE_WEBHOOK_SECRET = os.get('STRIPE_WEBHOOK_SECRET')
+DJSTRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 DJSTRIPE_USE_NATIVE_JSONFIELD = True

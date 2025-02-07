@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout as auth_logout
-from django.http import HttpResponse, JSONResponse
 from django.contrib.auth.hashers import check_password, make_password
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect
@@ -345,9 +344,9 @@ def stripe_webhook(request):
             payload, sig_header, settings.DJSTRIPE_WEBHOOK_SECRET
         )
     except ValueError:
-        return JSONResponse({'error':'Invalid Payload'}, status=400)
+        return JsonResponse({'error':'Invalid Payload'}, status=400)
     except stripe.error.SignatureVerificationError:
-        return JSONResponse({'error':'Invalid Signature'}, status=400)
+        return JsonResponse({'error':'Invalid Signature'}, status=400)
     
     if event['type'] == 'checkout.session.completed':
         session = event['data']['object']
@@ -364,12 +363,12 @@ def stripe_webhook(request):
         except Order.DoesNotExist:
             pass
 
-    return JSONResponse({'status':'Sucess'})
+    return JsonResponse({'status':'Sucess'})
 
 # This feature is for the sending of order confirmation email to user containing list of product bought
 def send_order_confirmation_email(order):
     subject = 'Order Confirmation'
-    message = render_to_string('pages/order_confirmation.html', {'order':order})
+    message = render_to_string('pages/order_confirmation_email.html', {'order':order})
     recipient =  order.customer.email
 
     send_mail(subject, message, 'noreply@Elvixluxe.com', [recipient], fail_silently=False)
