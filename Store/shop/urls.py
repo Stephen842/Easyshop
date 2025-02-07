@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import Signup, Index, Cart, CheckOut, OrderView 
+from .views import Signup, Index, Cart, CheckOut, Payment_cancel, OrderView 
 
 urlpatterns = [
     path('signup/', Signup.as_view(), name='signup'),
@@ -10,9 +10,10 @@ urlpatterns = [
     path('Store/', views.home, name='Store'),
     path('cart/', Cart.as_view(), name='cart'),
     path('checkout/', CheckOut.as_view(), name='checkout'),
-    path('orders/', OrderView.as_view(), name='orders'),
+    path('stripe-webhook/', views.stripe_webhook, name='stripe-webhook'), 
     path('order-confirm/', views.order_confirm, name='order-confirm'),
-    path('order-failed/', views.order_failed, name='order-failed'),
+    path('Payment-Cancel/', Payment_cancel.as_view(), name='payment-cancel'),
+    path('orders/', OrderView.as_view(), name='orders'),
     path('blog/', views.blog, name='blog'),
     path('post/<int:pk>/', views.blog_details, name='blog_details'),
     path('category/<category>/', views.blog_category, name='blog_category'),

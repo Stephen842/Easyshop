@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +29,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+load_dotenv() # Load environment variable from .env
 
 # Application definition
 
@@ -44,6 +46,7 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'django.contrib.humanize',
     'tinymce',
+    'djstripe',
 ]
 
 MIDDLEWARE = [
@@ -160,8 +163,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #this part is for the sending of email using Gmail as the SMTP provider.
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'elvixclothing@gmail.com'
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = os.get('EMAIL_HOST_USER') # For security purpose saved in .env
+EMAIL_HOST_PASSWORD = os.get('EMAIL_HOST_PASSWORD') # For security purpose saved in .env
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = 'elvixclothing@gmail.com'
+DEFAULT_FROM_EMAIL = os.get('EMAIL_HOST_USER')
+
+# This part for the integration of payment method(Stripe)
+
+DJSTRIPE_PUBLIC_KEY = os.get('STRIPE_PUBLIC_KEY') 
+DJSTRIPE_SECRET_KEY = os.get('STRIPE_SECRET_KEY')
+DJSTRIPE_LIVE_MODE = False # Change when going live
+DJSTRIPE_WEBHOOK_SECRET = os.get('STRIPE_WEBHOOK_SECRET')
+DJSTRIPE_USE_NATIVE_JSONFIELD = True

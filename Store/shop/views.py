@@ -16,6 +16,8 @@ from django.contrib import messages
 from django.db import transaction
 import uuid
 import stripe
+from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -282,27 +284,28 @@ class CheckOut(View):
             messages.error(request, "Your cart is empty.")
             return redirect('homepage')
 
+        # Create an order but mark it as unpaid
         order = Order.objects.create(
             customer=customer,
-            products=cart_item.product,
-            price=cart_item.total_price(),
+            products=cart_items.product,
+            price=cart_items.total_price(),
             address=address,
             phone=phone,
-            quantity=cart_item.quantity,
-            order_id=uuid.uuid4().hex[:10].upper()  # Generate a unique order_id for each order
+            quantity=cart_items.quantity,
+            order_id=uuid.uuid4().hex[:10].upper(), # Generate a unique order_id for each order
             paid=False
         )
 
         # This is to prepare Stripe session
-        line_items = [
+        line_items=[
             {
-                'price_data':{
+                'price_data': {
                     'currency': 'usd',
                     'product_data':{
                         'name': cart_items.product.name,
                     },
                     'unit_amount': int(cart_items.total_price*100),
-                }
+                },
                 'quantity': cart_items.quantity,
             }
         ]
@@ -313,7 +316,7 @@ class CheckOut(View):
                 line_items=line_items,
                 mode='payment',
                 success_url=request.build_absolute_uri(reverse('order-confirm')) + f'?session_id={{CHECKOUT_SESSION_ID}}',
-                cancel_url=request.build_absolute_uri(reverse('order-failed')),
+                cancel_url=request.build_absolute_uri(reverse('payment-cancel')),
                 metadata={'order_id':order.order_id}
             )
 
@@ -330,6 +333,46 @@ class CheckOut(View):
             messages.error(request, "Something went wrong during checkout. Please try again.")
             return redirect('checkout')
         
+
+# Stripe Webhook 
+@csrf_exempt
+def stripe_webhook(request):
+    payload = request.body
+    sig_header = request.headers.get('Stripe-Signature')
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, settings.DJSTRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        return JSONResponse({'error':'Invalid Payload'}, status=400)
+    except stripe.error.SignatureVerificationError:
+        return JSONResponse({'error':'Invalid Signature'}, status=400)
+    
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        order_id = session.get('metadata', {}).get('order_id')
+
+        try:
+            order = Order.objects.get(order_id=order_id)
+            order.paid = True
+            order.save()
+
+            # To Send an Order Confirmation Email
+            send_order_confirmation_email(order)
+
+        except Order.DoesNotExist:
+            pass
+
+    return JSONResponse({'status':'Sucess'})
+
+# This feature is for the sending of order confirmation email to user containing list of product bought
+def send_order_confirmation_email(order):
+    subject = 'Order Confirmation'
+    message = render_to_string('pages/order_confirmation.html', {'order':order})
+    recipient =  order.customer.email
+
+    send_mail(subject, message, 'noreply@Elvixluxe.com', [recipient], fail_silently=False)
 
 # For the viewing of all orders that have been placed successfully by a user
 @method_decorator(login_required, name='dispatch')
@@ -384,22 +427,11 @@ def order_confirm(request):
     }
     return render(request, 'pages/order_confirm.html', context)
 
-@login_required
-def order_failed(request):
-    # This part is for user's to subscribe to the newsletter found in the footer
-    if request.method  == 'POST':
-        form = NewsletterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return render(request, 'pages/success.html')
-    newsletter = NewsletterForm()
-
-    context = {
-        'title': 'Order Failed To Process',
-        'newsletter': newsletter,
-    }
-    
-    return render(request, 'pages/order_cancel.html', context)
+@method_decorator(login_required, name='dispatch')
+class Payment_cancel(View):
+    def get(self, request):
+        messages.error(request, 'Your payment was cancelled')
+        return redirect('checkout')
 
 # For the blog page
 def blog(request):
