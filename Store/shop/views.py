@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.db import transaction
 import uuid
-import stripe
+import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
@@ -333,38 +333,28 @@ class CheckOut(View):
             return redirect('checkout')
         
 
-# Stripe Webhook 
+# FlutterWave Webhook 
 @csrf_exempt
-def stripe_webhook(request):
-    payload = request.body
-    sig_header = request.headers.get('Stripe-Signature')
-
+def flutterwave_webhook(request):
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, settings.DJSTRIPE_WEBHOOK_SECRET
-        )
-    except ValueError:
-        return JsonResponse({'error':'Invalid Payload'}, status=400)
-    except stripe.error.SignatureVerificationError:
-        return JsonResponse({'error':'Invalid Signature'}, status=400)
+        event = request.POST
+        status = event.get('status')
+        tx_ref = event.get('txRef')
+
+        if status == 'successful':
+            try:
+                order = Order.objects.get(order_id=tx_ref)
+                order.paid = True
+                order.save()
+                send_order_confirmation_email(order)
+            except Order.DoesNotExist:
+                pass
+        
+        return JsonResponse({'status': 'success'})
     
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        order_id = session.get('metadata', {}).get('order_id')
-
-        try:
-            order = Order.objects.get(order_id=order_id)
-            order.paid = True
-            order.save()
-
-            # To Send an Order Confirmation Email
-            send_order_confirmation_email(order)
-
-        except Order.DoesNotExist:
-            pass
-
-    return JsonResponse({'status':'Sucess'})
-
+    except Exception as e:
+        return JsonResponse({'error':str(e)}, status=400)
+    
 # This feature is for the sending of order confirmation email to user containing list of product bought
 def send_order_confirmation_email(order):
     subject = 'Order Confirmation'

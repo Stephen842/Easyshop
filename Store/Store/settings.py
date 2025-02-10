@@ -169,7 +169,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
-# This part for the integration of payment method(Stripe)
+# This part for the integration of payment method(FlutterWave)
 
 DJSTRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY') 
 DJSTRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
