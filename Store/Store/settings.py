@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'django.contrib.humanize',
     'tinymce',
-    'djstripe',
 ]
 
 MIDDLEWARE = [
@@ -170,11 +169,7 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER')
 
 # This part for the integration of payment method(FlutterWave)
-FLUTTERWAVE_SECRET_KEY = os.getenv('FLUTTERWAVE_SECRET_KEY')
-
-#DJSTRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY') 
-#DJSTRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
-#DJSTRIPE_LIVE_MODE = False # Change when going live
-#DJSTRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
-#DJSTRIPE_USE_NATIVE_JSONFIELD = True
-#DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
+FLW_PUBLIC_KEY = os.getenv('FLUTTERWAVE_PUBLIC_KEY')
+FLW_SECRET_KEY = os.getenv('FLUTTERWAVE_SECRET_KEY')
+FLW_ENCRYPTION_KEY = os.getenv('FLUTTERWAVE_ENCRYPTION_KEY')
+FLW_BASE_URL = 'https://api.flutterwave.com/v3'

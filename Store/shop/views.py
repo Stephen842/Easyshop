@@ -275,7 +275,7 @@ class CheckOut(View):
         customer = request.user
 
         # Get cart data from the database
-        cart_items = CartItem.objects.filter(user=request.user)
+        cart_items = CartItem.objects.filter(user=customer)
         if not cart_items.exists():
             messages.error(request, "Your cart is empty.")
             return redirect('homepage')
@@ -293,42 +293,47 @@ class CheckOut(View):
         )
 
         # Flutterwave Payment Data
-        line_items=[
-            {
-                'price_data': {
-                    'currency': 'usd',
-                    'product_data':{
-                        'name': cart_items.product.name,
-                    },
-                    'unit_amount': int(cart_items.total_price*100),
-                },
-                'quantity': cart_items.quantity,
+        payload = {
+            'tx_ref': order.order_id,
+            'amount': cart_items.total_price(),
+            'currency': 'USD', # You can change to your desired currency
+            'redirect_url': request.build_absolute_uri(reverse('order-confirm')), # Redirect here after payment
+            'payment_options': 'card, ussd, banktransfer',
+            'customer': {
+                'email': customer.email,
+                'phonenumber': phone,
+                'name': customer.get_full_name()
+            },
+            'customizations':{
+                'title': 'Elvix Luxe Checkout',
+                'description': 'Secure Payment for Your Luxury Items',
+                "logo": "https://yourwebsite.com/elvix.png"
             }
-        ]
+        }
 
-        try:
-            session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=line_items,
-                mode='payment',
-                success_url=request.build_absolute_uri(reverse('order-confirm')) + f'?session_id={{CHECKOUT_SESSION_ID}}',
-                cancel_url=request.build_absolute_uri(reverse('payment-cancel')),
-                metadata={'order_id':order.order_id}
-            )
+        headers = {
+            'Authorization': f'Bearer {settings.FLUTTERWAVE_SECRET_KEY}',
+            'Content-Type': 'application/json'
+        }
 
-            # Save the stripe session ID for tracking payment
-            order.stripe_session_id = session.id
+        # To send the request to Flutterwave
+        response =requests.post(
+            'https://api.flutterwave.com/v3/payments',
+            json=payload,
+            headers=headers
+        )
+
+        res_data = response.json()
+        if res_data.get('status') == 'success':
+            payment_link = res_data['data']['link']
+            order.flutterwave_tx_ref = order.order_id # To save the transaction reference
             order.save()
-
-            # Clear the cart
-            cart_items.delete()
-
-            messages.success(request, "Order placed successfully!")
-            return redirect(session.url)
-        except Exception as e:
-            messages.error(request, "Something went wrong during checkout. Please try again.")
-            return redirect('checkout')
-        
+            cart_items.delete() # To clear the cart
+            messages.success(request, 'Order Placed Successfully')
+            return redirect(payment_link)
+        else:
+            messages.error(request, 'Something Went wrong. Try again.')
+            return redirect('payment-failed')
 
 # FlutterWave Webhook 
 @csrf_exempt
@@ -354,7 +359,7 @@ def flutterwave_webhook(request):
     
 # This feature is for the sending of order confirmation email to user containing list of product bought
 def send_order_confirmation_email(order):
-    subject = 'Order Confirmation'
+    subject = 'Order Confirmation – Thank You for Your Purchase!'
     message = render_to_string('pages/order_confirmation_email.html', {'order':order})
     recipient =  order.customer.email
 
@@ -413,11 +418,21 @@ def order_confirm(request):
     }
     return render(request, 'pages/order_confirm.html', context)
 
-@method_decorator(login_required, name='dispatch')
-class Payment_cancel(View):
-    def get(self, request):
-        messages.error(request, 'Your payment was cancelled')
-        return redirect('checkout')
+@login_required
+def Payment_failed(request):
+    # This part is for user's to subscribe to the newsletter found in the footer
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
+    context = {
+        'title': 'Order Placement Failed.',
+        'newsletter': newsletter,
+    }
+    return render(request, 'pages/payment-cancel.html', context)
 
 # For the blog page
 def blog(request):
@@ -591,3 +606,9 @@ def error_404(request):
         'newsletter': newsletter,
     }
     return render(request, 'pages/404.html', context)
+
+def email(request):
+    context={
+        'title': 'Testing Purpose',
+    }
+    return render(request, 'pages/order_confirmation_email.html', context)
