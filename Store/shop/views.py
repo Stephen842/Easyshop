@@ -20,8 +20,6 @@ from django.template.loader import render_to_string
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
-stripe.api_key = settings.DJSTRIPE_SECRET_KEY # For payment method - stripe
-
 # Create your views here.
 
 # To handle user's registration processes
@@ -259,7 +257,6 @@ class CheckOut(View):
     def get(self, request):
         context={
             'title': 'Order Confirmation',
-            'stripe_public_key': settings.DJSTRIPE_PUBLIC_KEY,
             'newsletter': NewsletterForm(),
         }
         # If request is GET it should render the checkout form
@@ -295,7 +292,7 @@ class CheckOut(View):
             paid=False
         )
 
-        # This is to prepare Stripe session
+        # Flutterwave Payment Data
         line_items=[
             {
                 'price_data': {
