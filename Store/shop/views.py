@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404 
-from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
 from django.views import View
@@ -17,6 +16,8 @@ import uuid
 import requests
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives, send_mail
+from django.utils.html import strip_tags
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -283,7 +284,7 @@ class CheckOut(View):
         # Create an order but mark it as unpaid
         order = Order.objects.create(
             customer=customer,
-            products=cart_items.product,
+            products=[item.product for item in cart_items], # Collect product list
             price=cart_items.total_price(),
             address=address,
             phone=phone,
@@ -328,7 +329,6 @@ class CheckOut(View):
             payment_link = res_data['data']['link']
             order.flutterwave_tx_ref = order.order_id # To save the transaction reference
             order.save()
-            cart_items.delete() # To clear the cart
             messages.success(request, 'Order Placed Successfully')
             return redirect(payment_link)
         else:
@@ -341,13 +341,17 @@ def flutterwave_webhook(request):
     try:
         event = request.POST
         status = event.get('status')
-        tx_ref = event.get('txRef')
+        tx_ref = event.get('tx_ref')
 
         if status == 'successful':
             try:
                 order = Order.objects.get(order_id=tx_ref)
                 order.paid = True
                 order.save()
+
+                # Delete cart items only after payment is confirmed
+                CartItem.objects.filter(user=order.customer).delete()
+
                 send_order_confirmation_email(order)
             except Order.DoesNotExist:
                 pass
@@ -360,10 +364,21 @@ def flutterwave_webhook(request):
 # This feature is for the sending of order confirmation email to user containing list of product bought
 def send_order_confirmation_email(order):
     subject = 'Order Confirmation – Thank You for Your Purchase!'
-    message = render_to_string('pages/order_confirmation_email.html', {'order':order})
+    sender_email = settings.EMAIL_HOST_USER
     recipient =  order.customer.email
 
-    send_mail(subject, message, 'noreply@Elvixluxe.com', [recipient], fail_silently=False)
+    # To render the HTML email template
+    message = render_to_string('pages/order_confirmation_email.html', {'order':order})
+
+    # Convert HTML to plain text for email clients that don't support HTML
+    text_content = strip_tags(message)
+
+    # Create an email message with both plain text anf HTML
+    email = EmailMultiAlternatives(subject, text_content, sender_email, [recipient])
+    email.attach_alternative(message, 'text/html')
+
+    # Send the email
+    email.send()
 
 # For the viewing of all orders that have been placed successfully by a user
 @method_decorator(login_required, name='dispatch')
