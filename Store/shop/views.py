@@ -607,7 +607,7 @@ def message_sent(request):
     }
     return render(request, 'pages/success.html', context)
 
-def error_404(request):
+def error_404(request, exception):
     # This part is for user's to subscribe to the newsletter found in the footer
     if request.method  == 'POST':
         form = NewsletterForm(request.POST)

@@ -26,6 +26,8 @@ urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 
+#This is a flag for handling 404(Page not found) errors
+handler404 = 'shop.views.error_404'
 
 # Serve media files during development
 if settings.DEBUG:
