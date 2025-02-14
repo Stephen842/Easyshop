@@ -55,13 +55,16 @@
                             </div>
                         {% endfor %}
                         <div class="mb-8 w-full">
-                            {{ form.name|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Enter Full Name' }}
+                            {{ form.name|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Full Name' }}
                         </div>
                         <div class="mb-8 w-full">
-                            {{ form.email|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Email' }}
+                            {{ form.email|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Email' Address }}
                         </div>
                         <div class="mb-8 w-full">
-                            {{ form.phone|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Enter Phone Number' }}
+                            {{ form.country|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Country' }}
+                        </div>
+                        <div class="mb-8 w-full">
+                            {{ form.phone|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder:Phone Number' }}
                         </div>
                         <div class="mb-8 w-full">
                             {{ form.password|add_class:'w-full text-gray-700 font-magnolia bg-transparent outline-none border-b border-red-500 rounded-b-sm placeholder-red-500 placeholder:font-magnolia'|attr:'placeholder: Password: minimum 8 characters.' }}

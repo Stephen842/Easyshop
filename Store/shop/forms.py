@@ -10,6 +10,7 @@ class CustomerForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'phone': forms.NumberInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'country': forms.TextInput(attrs={'class': 'form-control'}),
             'password': forms.PasswordInput(attrs={'class': 'form-control'}),
         }
 
@@ -52,6 +53,7 @@ class CartItemForm(forms.ModelForm):
     class Meta:
         model = CartItem
         fields = ['shipping']
+
 class ContactForm(forms.ModelForm):
     class Meta:
         model = ContactMail
