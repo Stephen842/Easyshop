@@ -265,11 +265,16 @@ class CheckOut(View):
 
     def post(self, request):
         # To process checkout form
-        address = request.POST.get('address')
+        name = request.POST.get('name')
+        email = request.POST.get('email')
         phone = request.POST.get('phone')
+        country = request.POST.get('country')
+        state = request.POST.get('state')
+        city = request.POST.get('city')
+        zipcode = request.POST.get('zipcode')
 
-        if not address or not phone:
-            messages.error(request, "Address and phone are required.")
+        if not state or not phone:
+            messages.error(request, "State and phone are required.")
             return redirect('checkout')  # Redirect back to checkout if inputs are invalid
 
         # Get the authenticated user
@@ -286,8 +291,14 @@ class CheckOut(View):
             customer=customer,
             products=[item.product for item in cart_items], # Collect product list
             price=cart_items.total_price(),
-            address=address,
+            state=state,
             phone=phone,
+            country=country,
+            city=city,
+            name=name,
+            email=email,
+            zipcode=zipcode,
+
             quantity=cart_items.quantity,
             order_id=uuid.uuid4().hex[:10].upper(), # Generate a unique order_id for each order
             paid=False

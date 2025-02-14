@@ -4,34 +4,40 @@ from PIL import Image
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from phonenumber_field.modelfields import PhoneNumberField
+from django_countries.fields import CountryField
 
 # Change the Product category to ManyToManyField for the product categories - categories = models.ManyToManyField(ProductCategory, related_name="products")
 
 # Create your models here.
 
 class CustomerManager(BaseUserManager):
-    def create_user(self, email, name, phone, password=None):
+    def create_user(self, email, name, phone, country, password=None):
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError('Enter Email address')
         if not name:
-            raise ValueError('Users must have a name')
+            raise ValueError('Enter Full name')
         if not phone:
-            raise ValueError('Users must have a phone number')
+            raise ValueError('Enter Phone Number')
+        if not country:
+            raise ValueError('Enter Country')
 
         user = self.model(
             email=self.normalize_email(email),
             name=name,
             phone=phone,
+            country=country,
         )
         user.set_password(password)  # Hash the password
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name, phone, password=None):
+    def create_superuser(self, email, name, phone, country, password=None):
         user = self.create_user(
             email=email,
             name=name,
             phone=phone,
+            country=country,
             password=password,
         )
         user.is_staff = True
@@ -42,7 +48,9 @@ class CustomerManager(BaseUserManager):
 class MyCustomer(AbstractBaseUser, PermissionsMixin):  # Add PermissionsMixin here
     name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(unique=True, blank=False)
-    phone = models.CharField(max_length=20, blank=False)
+    phone = PhoneNumberField(region='US')
+    country = CountryField(blank_label='Select Country', default="NG")
+    
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # Add this field
     is_superuser = models.BooleanField(default=False)  # Add this field
@@ -137,10 +145,17 @@ class Order(models.Model):
     order_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
-    address = models.CharField(max_length=400, blank=False)
-    phone = models.CharField(max_length=30, blank=False)
+    state = models.CharField(max_length=50, default='unknown')
+    phone = PhoneNumberField(region='US', default='+11234567890')
+    country = CountryField(blank_label='Select Country', default='US')
+    name = models.CharField(max_length=50, default='Anonymous User')
+    email = models.EmailField(default='unknown@example.com')
+    city = models.CharField(max_length=50, default='Unknown City')
+    zipcode = models.CharField(max_length=20, blank=True, default='000000')
     date = models.DateField(default=datetime.datetime.today)
     paid = models.BooleanField(default=False)
+
+
 
     def placeOrder(self):
         self.save()
