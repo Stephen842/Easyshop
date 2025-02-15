@@ -124,59 +124,77 @@
             </div>
         </header>
 
-        <div class="mt-36 mb-8 lg:mb-12 w-[90%]">
-            <h1 class="text-2xl m-2 font-bold"> Checkout </h1>
-            <div>
-                <h2 class="m-2"> Shipping Information </h2>
+        <div class="mt-36 mb-12 w-[90%] mx-auto">
+            <h1 class="text-3xl font-extrabold mb-4">Checkout</h1>
+        
+            <div class="bg-gray-100 p-6 rounded-lg shadow-md mb-8">
+                <h2 class="text-2xl font-semibold text-gray-800">Shipping Information</h2>
             </div>
-
+        
             {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} text-red-800 m-2">
-                    {{ message }}
+                    <div class="alert alert-{{ message.tags }} text-red-800 bg-red-100 p-4 rounded-lg mb-4">
+                        {{ message }}
                     </div>
                 {% endfor %}
             {% endif %}
-
+        
             <div class="flex flex-col lg:flex-row gap-8">
-                <div class="bg-white shadow-xl w-full lg:w-2/3 rounded-lg p-6">
-                    <form method="post" action="{% url 'checkout' %}" class="m-4">
+                <!-- Shipping Form -->
+                <div class="bg-white shadow-xl w-full lg:w-2/3 rounded-lg p-8">
+                    <form method="post" action="{% url 'checkout' %}" class="space-y-6">
                         {% csrf_token %}
-                        <div class="mb-4">
-                            <label for="name" class="block text-sm font-medium"> Full Name </label>
-                            <input type="text" name="name" id="name" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium"> Email Address </label>
-                            <input type="email" name="email" id="email" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label for="phone" class="block text-sm font-medium"> Phone Number</label>
-                            <input type="tel" name="phone" id="phone" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label for="country" class="block text-sm font-medium"> Country</label>
-                            <input type="text" name="country" id="country" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label for="city" class="block text-sm font-medium"> City </label>
-                            <input type="text" name="city" id="city" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label for="state" class="block text-sm font-medium"> State </label>
-                            <input type="text" name="state" id="state" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
-                        <div class="mb-4">
-                            <label for="zipcode" class="block text-sm font-medium"> Zipcode</label>
-                            <input type="text" name="zipcode" id="zipcode" required class="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none">
-                        </div>
                         
-                        <button type="submit" class="bg-red-500 text-white font-bold py-2 px-4 rounded"> Pay Now </button>
+                        <!-- Full Name -->
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input type="text" name="name" id="name" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- Email Address -->
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                            <input type="email" name="email" id="email" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- Phone Number -->
+                        <div class="mb-4">
+                            <label for="phone" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                            <input type="tel" name="phone" id="phone" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- Country -->
+                        <div class="mb-4">
+                            <label for="country" class="block text-sm font-medium text-gray-700">Country</label>
+                            <input type="text" name="country" id="country" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- City -->
+                        <div class="mb-4">
+                            <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                            <input type="text" name="city" id="city" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- State -->
+                        <div class="mb-4">
+                            <label for="state" class="block text-sm font-medium text-gray-700">State</label>
+                            <input type="text" name="state" id="state" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- Zipcode -->
+                        <div class="mb-4">
+                            <label for="zipcode" class="block text-sm font-medium text-gray-700">Zipcode</label>
+                            <input type="text" name="zipcode" id="zipcode" required class="mt-1 p-3 border border-gray-300 rounded-md w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+        
+                        <!-- <button type="submit" class="w-full py-3 text-white font-semibold bg-red-500 hover:bg-red-600 rounded-md transition duration-300">Pay Now</button>-->
                     </form>
                 </div>
-                <div class="bg-gray-100 shadow-xl w-full lg:w-1/3 rounded-lg p-6">
+        
+                <!-- Cart Review Section -->
+                <div class="bg-gray-50 shadow-xl w-full lg:w-1/3 rounded-lg p-6">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Review your cart</h2>
-
+        
                     {% for item in cart_items %}
                         <div class="flex items-center justify-between border-b py-4">
                             <!-- Product Image -->
@@ -186,16 +204,17 @@
                             <!-- Product Info -->
                             <div class="w-3/4 px-4">
                                 <h3 class="text-lg font-semibold text-gray-800">{{ item.product.name }}</h3>
-                                <p class="text-gray-800">{{ item.quantity }}x</p>
+                                <p class="text-gray-600">{{ item.quantity }}x</p>
                             </div>
-
+        
                             <!-- Product Price -->
                             <div>
                                 <p class="text-lg font-semibold text-gray-800">${{ item.product_price }}</p>
                             </div>
                         </div>
                     {% endfor %}
-
+        
+                    <!-- Cart Totals -->
                     <div class="mt-6 bg-gray-100 rounded-lg p-4 shadow-md">
                         <div class="flex justify-between items-center">
                             <p class="text-sm text-gray-600 font-medium">Subtotal:</p>
@@ -207,23 +226,24 @@
                         </div>
                         <div class="flex justify-between items-center mt-2">
                             <p class="text-sm text-gray-600 font-medium">Discount:</p>
-                            <p class="text-lg font-semibold text-gray-800">-$</p>
+                            <p class="text-lg font-semibold text-gray-800">-${{ discount }}</p>
                         </div>
                         <div class="flex justify-between items-center mt-4 border-t pt-4">
                             <p class="text-lg font-semibold text-gray-700">Total:</p>
                             <p class="text-xl font-bold text-red-500">${{ total }}</p>
                         </div>
                     </div>
-
+        
+                    <!-- Proceed to Checkout -->
                     <div class="mt-6">
-                        <a href="#" class="block bg-blue-600 hover:bg-blue-700 text-white font-medium text-center py-3 rounded-lg">
+                        <a href="#" class="block bg-blue-600 hover:bg-blue-700 text-white font-medium text-center py-3 rounded-lg transition duration-300">
                             Proceed to PayOut
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <footer class="relative w-full py-8">
             <div class="ml-6 md:ml-8 lg:ml-0">
                 <div class="grid grid-cols-1 lg:grid-cols-4 justify-evenly items-start gap-4">
