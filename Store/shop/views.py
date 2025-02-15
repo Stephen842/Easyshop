@@ -256,7 +256,33 @@ class Cart(View):
 @method_decorator(login_required, name='dispatch')
 class CheckOut(View):
     def get(self, request):
+
+        # Get cart data from the database from an authenticated user
+        cart_items = CartItem.objects.filter(user=request.user)
+
+        subtotal = 0 
+
+        shipping_cost = 1
+
+        cart_details = [] # Store processed cart items
+
+        for item in cart_items: 
+            product_price = int(item.product.price.replace(',', '')) * item.quantity  # Multiply product price by it quantity
+            subtotal += product_price # To Accumulate subtotal
+
+            cart_details.append({
+                'product': item.product,
+                'quantity': item.quantity,
+                'product_price': product_price, 
+            })
+
+        total = subtotal + shipping_cost
+        
         context={
+            'cart_items': cart_details,
+            'subtotal': subtotal,
+            'shipping_cost': shipping_cost,
+            'total': total,
             'title': 'Order Confirmation',
             'newsletter': NewsletterForm(),
         }
