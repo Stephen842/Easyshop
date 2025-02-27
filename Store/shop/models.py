@@ -63,6 +63,14 @@ class MyCustomer(AbstractBaseUser, PermissionsMixin):  # Add PermissionsMixin he
     def __str__(self):
         return self.email
 
+    def get_full_name(self):
+        """Return the customer's full name"""
+        return self.name  # Assuming 'name' is the full name
+
+    def get_short_name(self):
+        """Return the short name (same as full name in this case)"""
+        return self.name
+
 # For products and post category
 class Category(models.Model):
     name = models.CharField(max_length=50, db_index=True)
@@ -141,7 +149,7 @@ class CartItem(models.Model):
 #This is for the order model, where users fill the neccessary products they are ordering for and then the orders are been submitted
 class Order(models.Model):
     customer = models.ForeignKey(MyCustomer, on_delete=models.CASCADE, null=True, blank=True)
-    products = models.ForeignKey(Products, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Products, related_name="orders")
     order_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
     quantity = models.IntegerField(default=1)
     price = models.IntegerField()
@@ -164,6 +172,14 @@ class Order(models.Model):
     @staticmethod
     def get_orders_by_customer(customer_id):
         return Order.objects.filter(customer=customer_id).order_by('-date')
+
+class OrderItem(models.Model):  # Through Model
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey('Products', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()  # Store quantity per product
+
+    def __str__(self):
+        return f"{self.product.name} (x{self.quantity}) in Order {self.order.order_id}"
 
 # For Post Creation
 class Post(models.Model):

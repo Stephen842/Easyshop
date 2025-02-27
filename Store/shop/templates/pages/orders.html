@@ -145,28 +145,30 @@
                     <div class="flex items-center bg-gray-50 rounded-lg p-4 shadow-md">
                         <!-- Product Image -->
                         <div class="w-1/4">
-                            <img src="{{ order.products.image_0.url }}" alt="Product Image" class="rounded-lg w-full h-auto object-cover">
+                            <img src="{{ order.product.image_0.url }}" alt="Product Image" class="rounded-lg w-full h-auto object-cover">
                         </div>
         
                         <!-- Product Info -->
                         <div class="w-1/2 px-4">
-                            <h3 class="text-lg font-semibold text-gray-800">{{ order.products.name }}</h3>
+                            <h3 class="text-lg font-semibold text-gray-800">{{ order.product.name }}</h3>
                             <p class="text-sm text-gray-600 mt-1">
-                                Size: <span class="font-medium">{{ order.products.size }}</span>, 
-                                Color: <span class="font-medium">{{ order.products.color }}</span>
+                                Size: <span class="font-medium">{{ order.product.size }}</span>, 
+                                Color: <span class="font-medium">{{ order.product.color }}</span>
                             </p >
                             <p class="text-sm text-gray-600 mt-1">
-                                Order ID: <span class="text-gray-700">{{ order.order_id }}</span>
+                                Order ID: <span class="text-gray-700">{{ order.order.order_id }}</span>
                             </p>
                             <p class="text-xs text-gray-600 mt-1">
-                                Paid: <span>{{order.paid}}</span>
+                                Paid: <span>{{order.order.paid}}</span>
                             </p>
                         </div>
         
                         <!-- Quantity & Price -->
                         <div class="flex flex-col items-end w-1/4">
                             <p class="text-sm text-gray-600">Quantity: <span class="font-semibold text-gray-800">{{ order.quantity }}</span></p>
-                            <p class="text-lg font-semibold text-red-500 mt-1">${{ order.price }}</p>
+                            <p class="text-lg font-semibold text-red-500 mt-1">
+                                ${{ order.total_price|floatformat:2 }}
+                            </p>
                         </div>
                     </div>
                     {% endfor %}
@@ -218,8 +220,8 @@
                         <h2 class="text-lg mb-4 lg:mb-8 font-bold">Contact Us</h2>
                         <ul class="font-bold space-y-4 text-left">
                             <li><i class="bi bi-geo-alt"></i> Abuja Nigeria, Africa</li>
-                            <li><i class="bi bi-telephone-inbound"></i> +234 913 031 5165</li>
-                            <li><i class="bi bi-envelope-plus"></i> elvixclothing@gmail.com</li>
+                            <li><i class="bi bi-telephone-inbound"></i><a href="tel:+2349130315165"> +234 913 031 5165 </a></li>
+                            <li><i class="bi bi-envelope-plus"></i><a href="mailto:elvixclothing@gmail.com"> elvixclothing@gmail.com </a></li>
                         </ul>
                     </div>
                     <div class="mb-12 lg:mb-0">

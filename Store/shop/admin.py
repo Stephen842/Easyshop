@@ -2,7 +2,7 @@ from django.contrib import admin
 from tinymce.widgets import TinyMCE
 from django.db import models
 from django.db.models import Q
-from .models import MyCustomer, Category, ProductCategory, Products, CartItem, Order, Post, Comment, Gallery, ContactMail, Newsletter
+from .models import MyCustomer, Category, ProductCategory, Products, CartItem, Order, OrderItem, Post, Comment, Gallery, ContactMail, Newsletter
 
 # Register your models here.
 
@@ -57,15 +57,42 @@ class CartItemAdmin(admin.ModelAdmin):
     search_fields = ('user__name', 'product__name')  # Enable searching by user name or product name
     list_filter = ('shipping',)
 
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 1
+    readonly_fields = ('product', 'quantity',)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'products')
-    search_fields = ('id',)  # Only include fields directly on the Order model
+    list_display = ('id', 'customer_name', 'display_products')
+    search_fields = ('id', 'customer_name')
+    inlines = [OrderItemInline] # To show OrderItems inside Order
+
+    def total_price(self, obj):
+        return f'${obj.price:.2f}' # TO display the price in dollars
+    
+    total_price.short_description = 'Total Price'
+
+    def customer_name(self, obj):
+        return obj.customer.name
+    customer_name.short_description = 'Customer Name'    
+
+    def display_products(self, obj):
+        return ', '.join([product.name for product in obj.products.all()])
+
+    display_products.short_description = 'Product'
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        # Filter based on the related model's fields
-        queryset |= self.model.objects.filter(Q(products__name__icontains=search_term))
-        return queryset, use_distinct
+        
+       # Search for orders where customer's name matches the search term
+        customer_orders = self.model.objects.filter(customer__name__icontains=search_term)
+
+        queryset |= customer_orders
+        return queryset.distinct(), use_distinct
+
+class OrderItemAdmin(admin.ModelAdmin):  # Separate Admin for OrderItem
+    list_display = ('order', 'product', 'quantity')
+    search_fields = ('order__order_id', 'product__name')
 
 class PostAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -86,9 +113,9 @@ admin.site.register(MyCustomer, CustomerAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(ProductCategory, ProductCategoryAdmin)
 admin.site.register(Products, ProductsAdmin)
-#admin.site.register(Cart, CartAdmin)
 admin.site.register(CartItem, CartItemAdmin)
 admin.site.register(Order, OrderAdmin)
+admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Gallery, GalleryAdmin)

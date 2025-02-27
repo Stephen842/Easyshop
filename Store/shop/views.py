@@ -14,12 +14,15 @@ from django.contrib import messages
 from django.db import transaction
 import uuid
 import requests
+import json
+import hmac
+import hashlib
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
-from .models import MyCustomer, Category, ProductCategory, Products, Order, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
+from .models import MyCustomer, Category, ProductCategory, Products, Order, OrderItem, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
 # Create your views here.
 
@@ -315,8 +318,7 @@ class CheckOut(View):
         # Create an order but mark it as unpaid
         order = Order.objects.create(
             customer=customer,
-            products=[item.product for item in cart_items], # Collect product list
-            price=cart_items.total_price(),
+            price=sum(item.total_price() for item in cart_items),
             state=state,
             phone=phone,
             country=country,
@@ -325,17 +327,27 @@ class CheckOut(View):
             email=email,
             zipcode=zipcode,
 
-            quantity=cart_items.quantity,
             order_id=uuid.uuid4().hex[:10].upper(), # Generate a unique order_id for each order
             paid=False
         )
 
+        # Correctly store products and their quantity using OrderItem
+        for item in cart_items:
+            OrderItem.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity
+            )
+
+        order.flutterwave_tx_ref = order.order_id # To save the unique transaction ID
+        order.save()
+
         # Flutterwave Payment Data
         payload = {
-            'tx_ref': order.order_id,
-            'amount': cart_items.total_price(),
-            'currency': 'USD', # You can change to your desired currency
-            'redirect_url': request.build_absolute_uri(reverse('order-confirm')), # Redirect here after payment
+            'tx_ref': order.flutterwave_tx_ref,
+            'amount': sum(item.total_price() for item in cart_items),
+            'currency': 'USD',
+            'redirect_url': request.build_absolute_uri(reverse('order-confirm', args=[order.order_id])), # Redirect here after successful payment
             'payment_options': 'card, ussd, banktransfer',
             'customer': {
                 'email': customer.email,
@@ -355,43 +367,57 @@ class CheckOut(View):
         }
 
         # To send the request to Flutterwave
-        response =requests.post(
+        response = requests.post(
             'https://api.flutterwave.com/v3/payments',
             json=payload,
             headers=headers
         )
 
-        res_data = response.json()
-        if res_data.get('status') == 'success':
-            payment_link = res_data['data']['link']
-            order.flutterwave_tx_ref = order.order_id # To save the transaction reference
-            order.save()
-            messages.success(request, 'Order Placed Successfully')
-            return redirect(payment_link)
-        else:
-            messages.error(request, 'Something Went wrong. Try again.')
-            return redirect('payment-failed')
+        try:
+            res_data = response.json()  # Try parsing the JSON response
+            print("Parsed JSON Response:", res_data)
+
+            if res_data.get("status") == "success":
+                payment_link = res_data["data"]["link"]
+                messages.success(request, "Order Placed Successfully")
+                return redirect(payment_link)
+            else:
+                messages.error(request, "Something went wrong. Try again.")
+                return redirect("payment-failed")
+
+        except requests.exceptions.JSONDecodeError:
+            print("Failed to decode JSON. Raw response:", response.text)
+            messages.error(request, "Invalid response from payment gateway.")
+            return redirect("checkout")
 
 # FlutterWave Webhook 
 @csrf_exempt
 def flutterwave_webhook(request):
     try:
-        event = request.POST
+        #secret_hash = settings.FLUTTERWAVE_SECRET_HASH  # Set in settings.py
+        #signature = request.headers.get('verif-hash')
+
+        #if not secret_hash or signature != secret_hash:
+            #return JsonResponse({'error': 'Invalid webhook signature'}, status=403)
+
+
+        event = json.loads(request.body)
         status = event.get('status')
         tx_ref = event.get('tx_ref')
 
         if status == 'successful':
             try:
                 order = Order.objects.get(order_id=tx_ref)
-                order.paid = True
-                order.save()
+                if not order.paid:
+                    order.paid = True
+                    order.save()
 
-                # Delete cart items only after payment is confirmed
-                CartItem.objects.filter(user=order.customer).delete()
+                    # Clear cart items only after payment is confirmed
+                    CartItem.objects.filter(user=order.customer).delete()
 
-                send_order_confirmation_email(order)
+                    send_order_confirmation_email(order)
             except Order.DoesNotExist:
-                pass
+                return JsonResponse({'error': 'Order not found'}, status=404)
         
         return JsonResponse({'status': 'success'})
     
@@ -423,16 +449,21 @@ class OrderView(View):
     def get(self, request):
 
         # Get orders directly from the database linked to the logged-in user
-        orders = Order.objects.filter(customer=request.user).order_by('-id')
+        orders = OrderItem.objects.filter(order__customer=request.user).order_by('-id')
 
         if not orders.exists():
             messages.info(request, "You have no orders yet.")
 
         # Calculate subtotal by summing all the prices
-        subtotal = sum(order.price for order in orders)
+        subtotal = sum(float(order.product.price) * order.quantity for order in orders)
 
         shipping_cost = 1 
         total = subtotal + shipping_cost
+
+         # Attach computed total price to each order item
+        for order in orders:
+            order.total_price = float(order.product.price) * order.quantity
+
 
         # This part is for user's to subscribe to the newsletter found in the footer
         if request.method  == 'POST':
