@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'django.contrib.humanize',
     'tinymce',
+    'phonenumber_field',
+    'django_countries',
+
 ]
 
 MIDDLEWARE = [

@@ -15,8 +15,6 @@ from django.db import transaction
 import uuid
 import requests
 import json
-import hmac
-import hashlib
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
