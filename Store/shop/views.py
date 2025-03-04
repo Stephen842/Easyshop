@@ -701,13 +701,18 @@ def error_404(request, exception):
     newsletter = NewsletterForm()
 
     context = {
-        'title': 'Oops! Page Not Found',
+        "status_code": 404,
+        "error_message": "Page Not Found",
         'newsletter': newsletter,
+        'title': 'Oops! Page Not Found',
     }
-    return render(request, 'pages/404.html', context)
+    return render(request, 'pages/404.html', context, status=404)
 
-def email(request):
-    context={
-        'title': 'Testing Purpose',
+def error_500(request):
+    context = {
+        "status_code": 500,
+        "error_message": "Internal Server Error",
+        'title': '500 - Server Error',
     }
-    return render(request, 'pages/order_confirmation_email.html', context)
+    return render(request, 'pages/500.html', context, status=500)
+
