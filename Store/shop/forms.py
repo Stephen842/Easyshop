@@ -1,7 +1,13 @@
 from django import forms
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
 from .models import MyCustomer, Order, CartItem, ContactMail, Comment, Newsletter
 
 class CustomerForm(forms.ModelForm):
+    country = CountryField(blank_label='Select Country').formfield(
+        widget=CountrySelectWidget(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = MyCustomer
         fields = '__all__'

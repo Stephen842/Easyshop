@@ -49,7 +49,7 @@ class MyCustomer(AbstractBaseUser, PermissionsMixin):  # Add PermissionsMixin he
     name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(unique=True, blank=False)
     phone = PhoneNumberField(region='US')
-    country = CountryField(blank_label='Select Country', default="NG")
+    country = CountryField(blank_label='Select Country',)
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)  # Add this field
@@ -102,7 +102,7 @@ class Products(models.Model):
     size = models.CharField(max_length=20, blank=True)
     price = models.CharField(max_length=20, default=0)
     old_price = models.CharField(max_length=20, default=0)
-    category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ManyToManyField(ProductCategory, related_name='products')
     image_0 = models.ImageField(upload_to='media/')
 
     def __str__(self):

@@ -19,6 +19,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
+from django.templatetags.static import static
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, OrderItem, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -307,6 +308,8 @@ class CheckOut(View):
         # Get the authenticated user
         customer = request.user
 
+        shipping_cost = 1
+
         # Get cart data from the database
         cart_items = CartItem.objects.filter(user=customer)
         if not cart_items.exists():
@@ -343,7 +346,7 @@ class CheckOut(View):
         # Flutterwave Payment Data
         payload = {
             'tx_ref': order.flutterwave_tx_ref,
-            'amount': sum(item.total_price() for item in cart_items),
+            'amount': sum(item.total_price() for item in cart_items) + shipping_cost,
             'currency': 'USD',
             'redirect_url': request.build_absolute_uri(reverse('order-confirm', args=[order.order_id])), # Redirect here after successful payment
             'payment_options': 'card, ussd, banktransfer',
@@ -355,7 +358,7 @@ class CheckOut(View):
             'customizations':{
                 'title': 'Elvix Luxe Checkout',
                 'description': 'Secure Payment for Your Luxury Items',
-                "logo": "https://yourwebsite.com/elvix.png"
+                "logo": request.build_absolute_uri(static('elvix.png'))
             }
         }
 
@@ -484,7 +487,13 @@ class OrderView(View):
         return render(request, 'pages/orders.html', context)
 
 @login_required
-def order_confirm(request):
+def order_confirm(request, order_id):
+    status = request.GET.get('status')  # Get the status from the URL
+    tx_ref = request.GET.get('tx_ref')  # Get transaction reference
+
+    # Retrieve the order details from the database
+    order = Order.objects.filter(order_id=order_id).first()
+
     # This part is for user's to subscribe to the newsletter found in the footer
     if request.method  == 'POST':
         form = NewsletterForm(request.POST)
@@ -496,7 +505,16 @@ def order_confirm(request):
     context = {
         'title': 'Order Placed Successfully',
         'newsletter': newsletter,
+        'order_id': order_id,
+        'status': status,  # Pass payment status
+        'tx_ref': tx_ref,  # Pass transaction reference
+        'order': order  # Pass the order object if needed
     }
+
+    if status == "cancelled":
+        return redirect('payment-failed')  # Redirect to a payment cancelled page
+
+    # Proceed with normal order confirmation if not cancelled
     return render(request, 'pages/order_confirm.html', context)
 
 @login_required

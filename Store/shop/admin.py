@@ -8,7 +8,7 @@ from .models import MyCustomer, Category, ProductCategory, Products, CartItem, O
 
 class CustomerAdmin(admin.ModelAdmin):
     # Specify the fields to be displayed in the list view
-    list_display = ('id','email', 'name', 'phone', 'is_active', 'is_staff')
+    list_display = ('id','email', 'name', 'phone', 'country', 'is_active', 'is_staff')
     
     # Add filters in the right sidebar
     list_filter = ('is_active', 'is_staff')
@@ -18,7 +18,7 @@ class CustomerAdmin(admin.ModelAdmin):
     
     # Add fields to be displayed in the detail view
     fieldsets = (
-        (None, {'fields': ('email', 'name', 'phone', 'is_active', 'is_staff')}),
+        (None, {'fields': ('email', 'name', 'phone', 'country', 'is_active', 'is_staff')}),
         ('Permissions', {'fields': ('is_superuser',)}),
     )
 
@@ -36,8 +36,9 @@ class ProductCategoryAdmin(admin.ModelAdmin):
     pass
 
 class ProductsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'price', 'category')
+    list_display = ('id', 'name', 'price',)
     search_fields = ('name', 'price')
+    filter_horizontal = ('category',)
 
     formfield_overrides = {
         models.TextField: {'widget': TinyMCE()},
