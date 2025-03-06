@@ -143,4 +143,4 @@ __Installation & Setup__
 
     Lead Dev Contact: +234 807 462 5742
 
-THANK YOU
+![License: CC BY-NC-ND 4.0](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg)
