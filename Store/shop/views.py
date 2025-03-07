@@ -20,6 +20,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
 from django.templatetags.static import static
+from django.db.models import Count, Q
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, OrderItem, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -43,7 +44,7 @@ class Signup(View):
 
 # To handle user's authentication process with error handling capabilities
 def Signin(request):
-    if request.method == "GET":
+    if request.method == 'GET':
         if request.user.is_authenticated:
             return redirect('homepage')
         form = SigninForm()
@@ -76,42 +77,53 @@ def logout(request):
     auth_logout(request)  # Logs out the user without clearing session data.
     return redirect('homepage') 
 
-class Index(View):
-    def post(self, request):
-        user = request.user
-        product_id = request.POST.get('product')
-        remove = request.POST.get('remove')
 
-        if not user.is_authenticated:
-            # Redirect to login if user is not authenticated
-            return redirect(f"{reverse('login')}?next={request.path}")
-        
-        # Get the product
-        product = get_object_or_404(Products, id=product_id)
+# Function to add to Cart via AJAX API endpoint
+@csrf_exempt
+def add_to_cart(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'message': 'You must be logged in to add items to the cart.'}, status=401)
 
-        # Check if the product is already in the cart for the user
-        cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
+    
+    product_id = request.POST.get('product_id')
+    action = request.POST.get('action')
 
-        if remove:
-            if cart_item.quantity <= 1:
-                cart_item.delete()
-            else:
-                cart_item.quantity -= 1
-                cart_item.save()
-        else:
-            cart_item.quantity += 1
+    if not product_id:
+        return JsonResponse({'success': False, 'message': 'Missing product ID.'}, status=400)
+
+    if action not in ['add', 'remove']:
+        return JsonResponse({'success': False, 'message': 'Invalid action.'}, status=400)
+
+    # Get the product (handle the case if the product does not exist)
+    user = request.user
+    product = get_object_or_404(Products, id=product_id)
+
+    # Retrieve or create a cart item
+    cart_item, created = CartItem.objects.get_or_create(user=user, product=product)
+
+    if action == 'add':
+        cart_item.quantity += 1
+        cart_item.save()
+        message = 'Product added to cart!'
+
+    elif action == 'remove':
+        if cart_item.quantity > 1:
+            cart_item.quantity -= 1
             cart_item.save()
+            message = 'Product quantity decreased!'
+            
+        else:
+            cart_item.delete()
+            message = 'Product removed from cart!'
 
-        # Optionally, synchronize the session cart data (e.g., product IDs and quantities) for future reference
-        cart_items = CartItem.objects.filter(user=user)
-        session_cart = {}
-        for item in cart_items:
-            session_cart[item.product.id] = item.quantity
+    cart_count = CartItem.objects.filter(user=user).count()
 
-        request.session['cart'] = session_cart  # Update session with the current cart state
-        
-        return redirect('Store/')
-        
+    return JsonResponse({'success': True, 'message': message,  'cart_count': cart_count})
+
+
+class Index(View):
     def get(self, request):
         # Redirect to the store or render a response as per your application
         return HttpResponseRedirect(f'/Store{request.get_full_path()[1:]}')
@@ -170,9 +182,9 @@ def home(request):
 def Product_details(request, id):
     all_product = Products.objects.get(id=id)
 
-     # Logic for related products: Get other products from the same category
-    #related_products = Products.objects.filter(category=all_product.category).exclude(id=all_product.id)
-
+    # Logic for related products: Get other products that shares two or categories
+    related_products = Products.objects.filter(category__in=all_product.category.all()).exclude(id=all_product.id).annotate(matching_categories=Count('category', filter=Q(category__in=all_product.category.all()))).filter(matching_categories__gt=1).distinct()
+    
     #This below is for the comment section of each product
     #form = CommentForm()
     #if request.method == 'POST':
@@ -189,10 +201,20 @@ def Product_details(request, id):
 
     #comments = Comment.objects.filter(post=all_product)
 
+    # Newsletter subscription form
+    if request.method  == 'POST':
+        form = NewsletterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'pages/success.html')
+    newsletter = NewsletterForm()
+
     context = {
         'all_product': all_product,
-        #'related_products': related_products,
+        'related_products': related_products,
         #'comments': comments,
+        'newsletter': newsletter,
+        
     }
     return render(request, 'pages/product_details.html', context)
 
@@ -333,7 +355,7 @@ class CheckOut(View):
         zipcode = request.POST.get('zipcode')
 
         if not state or not phone:
-            messages.error(request, "State and phone are required.")
+            messages.error(request, 'State and phone are required.')
             return redirect('checkout')  # Redirect back to checkout if inputs are invalid
 
         # Get the authenticated user
@@ -344,7 +366,7 @@ class CheckOut(View):
         # Get cart data from the database
         cart_items = CartItem.objects.filter(user=customer)
         if not cart_items.exists():
-            messages.error(request, "Your cart is empty.")
+            messages.error(request, 'Your cart is empty.')
             return redirect('homepage')
 
         # Create an order but mark it as unpaid
@@ -389,7 +411,7 @@ class CheckOut(View):
             'customizations':{
                 'title': 'Elvix Luxe Checkout',
                 'description': 'Secure Payment for Your Luxury Items',
-                "logo": request.build_absolute_uri(static('elvix.png'))
+                'logo': request.build_absolute_uri(static('elvix.png'))
             }
         }
 
@@ -407,20 +429,20 @@ class CheckOut(View):
 
         try:
             res_data = response.json()  # Try parsing the JSON response
-            print("Parsed JSON Response:", res_data)
+            print('Parsed JSON Response:', res_data)
 
-            if res_data.get("status") == "success":
-                payment_link = res_data["data"]["link"]
-                messages.success(request, "Order Placed Successfully")
+            if res_data.get('status') == 'success':
+                payment_link = res_data['data']['link']
+                messages.success(request, 'Order Placed Successfully')
                 return redirect(payment_link)
             else:
-                messages.error(request, "Something went wrong. Try again.")
-                return redirect("payment-failed")
+                messages.error(request, 'Something went wrong. Try again.')
+                return redirect('payment-failed')
 
         except requests.exceptions.JSONDecodeError:
-            print("Failed to decode JSON. Raw response:", response.text)
-            messages.error(request, "Invalid response from payment gateway.")
-            return redirect("checkout")
+            print('Failed to decode JSON. Raw response:', response.text)
+            messages.error(request, 'Invalid response from payment gateway.')
+            return redirect('checkout')
 
 # FlutterWave Webhook 
 @csrf_exempt
@@ -484,7 +506,7 @@ class OrderView(View):
         orders = OrderItem.objects.filter(order__customer=request.user).order_by('-id')
 
         if not orders.exists():
-            messages.info(request, "You have no orders yet.")
+            messages.info(request, 'You have no orders yet.')
 
         # Calculate subtotal by summing all the prices
         subtotal = sum(float(order.product.price) * order.quantity for order in orders)
@@ -542,7 +564,7 @@ def order_confirm(request, order_id):
         'order': order  # Pass the order object if needed
     }
 
-    if status == "cancelled":
+    if status == 'cancelled':
         return redirect('payment-failed')  # Redirect to a payment cancelled page
 
     # Proceed with normal order confirmation if not cancelled
@@ -598,7 +620,7 @@ def blog_category(request, category):
     newsletter = NewsletterForm()
 
     context = {
-        "category": category,
+        'category': category,
         'posts': posts,
         'title': 'Discover Your Perfect Style',
         'newsletter': newsletter,
@@ -732,8 +754,8 @@ def error_404(request, exception):
     newsletter = NewsletterForm()
 
     context = {
-        "status_code": 404,
-        "error_message": "Page Not Found",
+        'status_code': 404,
+        'error_message': 'Page Not Found',
         'newsletter': newsletter,
         'title': 'Oops! Page Not Found',
     }
@@ -741,8 +763,8 @@ def error_404(request, exception):
 
 def error_500(request):
     context = {
-        "status_code": 500,
-        "error_message": "Internal Server Error",
+        'status_code': 500,
+        'error_message': 'Internal Server Error',
         'title': '500 - Server Error',
     }
     return render(request, 'pages/500.html', context, status=500)
