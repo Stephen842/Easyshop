@@ -8,6 +8,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('', Index.as_view(), name='homepage'), 
     path('Store/', views.home, name='Store'),
+    path('product-details/<int:id>', views.Product_details, name='product-details'),
     path('cart/', Cart.as_view(), name='cart'),
     path('checkout/', CheckOut.as_view(), name='checkout'),
     path('flutterwave-webhook/', views.flutterwave_webhook, name='flutterwave-webhook'), 

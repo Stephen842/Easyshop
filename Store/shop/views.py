@@ -165,6 +165,37 @@ def home(request):
     }
     return render(request, 'pages/store.html', context)
 
+
+# For rendering a detailed description about a product
+def Product_details(request, id):
+    all_product = Products.objects.get(id=id)
+
+     # Logic for related products: Get other products from the same category
+    #related_products = Products.objects.filter(category=all_product.category).exclude(id=all_product.id)
+
+    #This below is for the comment section of each product
+    #form = CommentForm()
+    #if request.method == 'POST':
+        #form = CommentForm(request.POST)
+        #if form.is_valid():
+            #customer = Customer.objects.get(name=request.user.name)  # Get the Customer instance
+            #comment = Comment(
+                        #author = customer,  # Assign the Customer instance
+                        #body = form.cleaned_data['body'],
+                        #post = all_product,
+                    #)
+            #comment.save()
+            #return redirect(request.path_info)
+
+    #comments = Comment.objects.filter(post=all_product)
+
+    context = {
+        'all_product': all_product,
+        #'related_products': related_products,
+        #'comments': comments,
+    }
+    return render(request, 'pages/product_details.html', context)
+
 # For the cart page 
 @method_decorator(login_required, name='dispatch')
 class Cart(View):
