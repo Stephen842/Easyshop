@@ -368,11 +368,13 @@ class CheckOut(View):
         if not cart_items.exists():
             messages.error(request, 'Your cart is empty.')
             return redirect('homepage')
+        
+        order_price = sum(item.total_price() for item in cart_items)
 
         # Create an order but mark it as unpaid
         order = Order.objects.create(
             customer=customer,
-            price=sum(item.total_price() for item in cart_items),
+            price=order_price,
             state=state,
             phone=phone,
             country=country,
@@ -399,7 +401,7 @@ class CheckOut(View):
         # Flutterwave Payment Data
         payload = {
             'tx_ref': order.flutterwave_tx_ref,
-            'amount': sum(item.total_price() for item in cart_items) + shipping_cost,
+            'amount': order_price + shipping_cost,
             'currency': 'USD',
             'redirect_url': request.build_absolute_uri(reverse('order-confirm', args=[order.order_id])), # Redirect here after successful payment
             'payment_options': 'card, ussd, banktransfer',
@@ -420,30 +422,40 @@ class CheckOut(View):
             'Content-Type': 'application/json'
         }
 
-        # To send the request to Flutterwave
-        response = requests.post(
-            'https://api.flutterwave.com/v3/payments',
-            json=payload,
-            headers=headers
-        )
-
         try:
-            res_data = response.json()  # Try parsing the JSON response
-            print('Parsed JSON Response:', res_data)
+            response = requests.post(
+                'https://api.flutterwave.com/v3/payments',
+                json=payload,
+                headers=headers,
+                timeout=10  # Add timeout to avoid infinite waiting
+            )
+            response.raise_for_status()  # Raise an error for HTTP 4xx/5xx
+
+            res_data = response.json()  # Convert response to JSON
 
             if res_data.get('status') == 'success':
-                payment_link = res_data['data']['link']
-                messages.success(request, 'Order Placed Successfully')
-                return redirect(payment_link)
+                return redirect(res_data['data']['link'])  # Redirect to payment page
             else:
-                messages.error(request, 'Something went wrong. Try again.')
+                messages.error(request, 'Payment failed. Try again.')
                 return redirect('payment-failed')
 
-        except requests.exceptions.JSONDecodeError:
-            print('Failed to decode JSON. Raw response:', response.text)
-            messages.error(request, 'Invalid response from payment gateway.')
+        except requests.exceptions.Timeout:
+            messages.error(request, 'Payment request timed out. Please try again.')
             return redirect('checkout')
 
+        except requests.exceptions.ConnectionError:
+            messages.error(request, 'Network error. Please check your internet connection.')
+            return redirect('checkout')
+
+        except requests.exceptions.HTTPError as e:
+            messages.error(request, f'Payment gateway error: {e}')
+            return redirect('checkout')
+
+        except requests.exceptions.RequestException as e:
+            messages.error(request, f'An unexpected error occurred: {e}')
+            return redirect('checkout')
+        
+        
 # FlutterWave Webhook 
 @csrf_exempt
 def flutterwave_webhook(request):

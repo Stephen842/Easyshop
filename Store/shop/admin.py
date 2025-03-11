@@ -64,7 +64,7 @@ class OrderItemInline(admin.TabularInline):
     extra = 1
     readonly_fields = ('product', 'quantity',)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id', 'customer_name', 'display_products')
+    list_display = ('id', 'customer_name', 'display_products', 'date')
     search_fields = ('id', 'customer_name')
     inlines = [OrderItemInline] # To show OrderItems inside Order
 
@@ -108,6 +108,7 @@ class CommentAdmin(admin.ModelAdmin):
 class GalleryAdmin(admin.ModelAdmin):
     pass
 class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'submitted_at')
     pass
 
 admin.site.register(MyCustomer, CustomerAdmin)
