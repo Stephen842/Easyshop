@@ -21,6 +21,7 @@ from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.html import strip_tags
 from django.templatetags.static import static
 from django.db.models import Count, Q
+import logging
 from .forms import CustomerForm, CartItemForm, SigninForm, CommentForm, ContactForm, NewsletterForm # Import the form
 from .models import MyCustomer, Category, ProductCategory, Products, Order, OrderItem, CartItem, Post, Comment, Gallery, ContactMail  # and also Import the model
 
@@ -455,40 +456,59 @@ class CheckOut(View):
             messages.error(request, f'An unexpected error occurred: {e}')
             return redirect('checkout')
         
-        
-# FlutterWave Webhook 
+
+# FlutterWave Webhook
 @csrf_exempt
 def flutterwave_webhook(request):
+
+    logger = logging.getLogger('webhook')
+
     try:
-        #secret_hash = settings.FLUTTERWAVE_SECRET_HASH  # Set in settings.py
-        #signature = request.headers.get('verif-hash')
+        # Verify the request signature
+        secret_hash = settings.FLUTTERWAVE_SECRET_HASH
+        signature = request.headers.get("verif-hash")
 
-        #if not secret_hash or signature != secret_hash:
-            #return JsonResponse({'error': 'Invalid webhook signature'}, status=403)
+        logger.info(f"Expected Secret Hash: {secret_hash}")
+        logger.info(f"Received Signature: {signature}")
 
+        if not secret_hash or signature != secret_hash:
+            logger.error("Invalid webhook signature")
+            return JsonResponse({"error": "Invalid webhook signature"}, status=403)
 
-        event = json.loads(request.body)
-        status = event.get('status')
-        tx_ref = event.get('tx_ref')
+        # To ensure the request is JSON
+        try:
+            event = json.loads(request.body)
+        except json.JSONDecodeError:
+            logger.error("Invalid JSON format")
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
 
-        if status == 'successful':
-            try:
-                order = Order.objects.get(order_id=tx_ref)
-                if not order.paid:
-                    order.paid = True
-                    order.save()
+        logger.info(f"Received Webhook: {event}")
 
-                    # Clear cart items only after payment is confirmed
-                    CartItem.objects.filter(user=order.customer).delete()
+        # Extract data correctly
+        status = event.get("data", {}).get("status")
+        tx_ref = event.get("data", {}).get("tx_ref")
 
-                    send_order_confirmation_email(order)
-            except Order.DoesNotExist:
-                return JsonResponse({'error': 'Order not found'}, status=404)
-        
-        return JsonResponse({'status': 'success'})
-    
+        # Process successful payment
+        if status == "successful":
+            order = Order.objects.filter(order_id=tx_ref, paid=False).first()
+            if order:
+                order.paid = True
+                order.save()
+
+                # Clear cart after successful payment
+                CartItem.objects.filter(user=order.customer).delete()
+
+                # Send confirmation email
+                send_order_confirmation_email(order)
+
+                 # Log only necessary details
+                logger.info(f"Order {tx_ref} marked as paid and email sent.")
+
+        return JsonResponse({"status": "success"})
+
     except Exception as e:
-        return JsonResponse({'error':str(e)}, status=400)
+        logger.error(f"Webhook processing error: {str(e)}")
+        return JsonResponse({"error": str(e)}, status=400)
     
 # This feature is for the sending of order confirmation email to user containing list of product bought
 def send_order_confirmation_email(order):

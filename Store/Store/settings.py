@@ -178,3 +178,38 @@ FLUTTERWAVE_SECRET_KEY = os.getenv('FLUTTERWAVE_SECRET_KEY')
 FLUTTERWAVE_ENCRYPTION_KEY = os.getenv('FLUTTERWAVE_ENCRYPTION_KEY')
 FLUTTERWAVE_SECRET_HASH = os.getenv('FLUTTERWAVE_SECRET_HASH')
 FLUTTERWAVE_BASE_URL = 'https://api.flutterwave.com/v3'
+
+# For storing of flutterwave webhook logs
+LOG_DIR = os.path.join(BASE_DIR, 'logs')  # Create a logs directory inside your project
+os.makedirs(LOG_DIR, exist_ok=True)  # Ensure the directory exists
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'flutterwave_webhook.log'),
+            'formatter': 'verbose',  # Make sure this formatter exists
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'webhook': {  # Separate logger for webhooks
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
