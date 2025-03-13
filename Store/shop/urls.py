@@ -23,4 +23,5 @@ urlpatterns = [
     path('contact_us/', views.contact, name='contact_us'),
     path('search/', views.search, name='search'),
     path('message_sent/', views.message_sent, name='message_sent'),
+    path('email/', views.email, name='email'),
 ]

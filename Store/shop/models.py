@@ -174,7 +174,7 @@ class Order(models.Model):
         return Order.objects.filter(customer=customer_id).order_by('-date')
 
 class OrderItem(models.Model):  # Through Model
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
     product = models.ForeignKey('Products', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()  # Store quantity per product
 

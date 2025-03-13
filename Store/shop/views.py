@@ -516,8 +516,11 @@ def send_order_confirmation_email(order):
     sender_email = settings.EMAIL_HOST_USER
     recipient =  order.customer.email
 
+    # Ensure order_items are loaded before rendering the email
+    order_items = order.order_items.all()
+
     # To render the HTML email template
-    message = render_to_string('pages/order_confirmation_email.html', {'order':order})
+    message = render_to_string('pages/order_confirmation_email.html', {'order':order, 'order_items': order_items})
 
     # Convert HTML to plain text for email clients that don't support HTML
     text_content = strip_tags(message)
@@ -801,3 +804,8 @@ def error_500(request):
     }
     return render(request, 'pages/500.html', context, status=500)
 
+def email(request):
+    context={
+        'title': 'testing',
+    }
+    return render(request, 'pages/order_confirmation_email.html', context)

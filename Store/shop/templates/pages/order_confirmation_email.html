@@ -22,11 +22,11 @@
         <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Magnolia+Script&display=swap" rel="stylesheet">
 
-        
+
         <!-- TailwindCSS Compilation -->
         <link rel="stylesheet" href="{% static 'src/styles.css' %}">
         <link rel="stylesheet" href="{% static 'style.css' %}">
-        
+
         <title>Order Confirmation - Elvix Luxe</title>
     </head>
 
@@ -34,45 +34,61 @@
     <body style="background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; min-height: 100vh;">
         <div style="background-color: white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 8px; padding: 24px; max-width: 400px; width: 100%; text-align: center; margin: 16px;">
             <div>
-                <img src="{% static 'elvix.png' %}" alt="Elvix Luxe Logo" style="display: block; margin: 0 auto; width: 80px;">
+                <img src="https://lh3.googleusercontent.com/a/ACg8ocLf0HVJ3N0oua6QPLVMn97W87fHvbEuPsLyHk6PdVmSTP1GyWk=s96-c-rg-br100" alt="Elvix Luxe Logo" style="display: block; margin: 0 auto; width: 80px;">
                 <h2 style="font-family: 'Magnolia Script', cursive; font-weight: bold; font-size: 14px; color: #4b5563; margin-top: -16px;">Elvix Luxe</h2>
             </div>
             <h2 style="font-size: 16px; font-weight: 600; color: #4b5563; margin-top: 16px;">Thank you for your purchase! Your order has been successfully placed.</h2>
             <p style="color: #4b5563; margin-top: 8px;">Hello <strong>{{ order.customer.get_full_name }}</strong>,</p>
             <p style="font-weight: 600; color: #374151; margin-top: 8px;">Your order ID <strong>{{ order.order_id }}</strong></p>
-            
+
             <div style="background-color: #f9fafb; padding: 16px; border-radius: 8px; margin-top: 16px; text-align: left;">
                 <h3 style="font-size: 18px; font-weight: 600; color: #4b5563;">Order Details:</h3>
                 <div style="margin-top: 16px; margin-bottom: 16px;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 600; color: #4b5563;">
-                        <h2>Product</h2>
-                        <h2>Quantity</h2>
-                        <h2>Price</h2>
-                    </div>
-                    {% for item in order.order_items.all %}
-                    <div style="display: flex; justify-content: space-between; color: #4b5563;">
-                        <h2>{{item.product.name}}</h2>
-                        <h2>{{item.quantity}}</h2>
-                        <h2>{{item.product.price}}</h2>
-                    </div>
-                    {% endfor %}
+                    <table style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; color: #4b5563;">
+                        <thead>
+                            <tr style="background-color: #f3f4f6; text-align: left;">
+                                <th style="padding: 12px; border-bottom: 2px solid #d1d5db;">Product</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #d1d5db;">Quantity</th>
+                                <th style="padding: 12px; border-bottom: 2px solid #d1d5db;">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in order_items %}
+                            <tr>
+                                <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;"><a href="{% url 'product-details' product.id %}"> {{ item.product.name }}</a></td>
+                                <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">{{ item.quantity }}</td>
+                                <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${{ item.product.price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
                 <ul style="color: #4b5563; margin-top: 8px; list-style-type: none; padding-left: 0;">
-                    <li><span style="font-weight: 600;">Address:</span> {{ order.address }}</li>
-                    <li><span style="font-weight: 600;">Phone:</span> {{ order.phone }}</li>
-                    <li><span style="font-weight: 600;">Total Price:</span> ${{ order.price }}</li>
+                    <li style="margin-bottom: 8px;"><strong>Delivery Address:</strong> {{ order.zipcode }}, {{ order.city }}, {{ order.state }}, {{ order.country }}</li>
+                    <li style="margin-bottom: 8px;"><strong>Phone Number:</strong> {{ order.phone }}</li>
+                    <li><strong>Total Price:</strong> ₦{{ order.price }}</li>
                 </ul>
             </div>
-            
+
             <p style="color: #4b5563; margin-top: 16px;">We will notify you when your order is shipped.</p>
             <p style="color: #374151; margin-top: 8px;">Thank you for shopping with us!</p>
-            
-            <a href="/shop" style="margin-top: 24px; display: inline-block; background-color: #ef4444; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.2s ease-in-out;">Continue Shopping</a>
 
-            <div style="display: flex; justify-content: center; font-size: 20px; margin-top: 16px;">
-                <i class="bi bi-facebook" style="margin: 16px;"></i>
-                <i class="bi bi-twitter-x" style="margin: 16px;"></i>
-                <i class="bi bi-instagram" style="margin: 16px;"></i>
+            <a href="https://elvixluxe.com" style="margin-top: 24px; display: inline-block; background-color: #ef4444; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: background-color 0.2s ease-in-out;">Continue Shopping</a>
+
+            <div style="display: flex; justify-content: center; font-size: 20px; margin-top: 16px; padding: 16px; gap: 12px;">
+
+                <a href="https://www.tiktok.com/@elvix.sn?_t=ZN-8uP3ab07Ub0&_r=1" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/128/3046/3046122.png" alt="TikTok" style="width: 32px; height: 32px;">
+                </a>
+            
+                <a href="https://www.instagram.com/anene_elvix?igsh=MTFzOXF2ZmNvbTB2Zg%3D%3D&utm_source=qr" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/128/2111/2111463.png" alt="Instagram" style="width: 32px; height: 32px;">
+                </a>
+            
+                <a href="#" target="_blank">
+                    <img src="https://cdn-icons-png.flaticon.com/128/5968/5968764.png" alt="Facebook" style="width: 32px; height: 32px;">
+                </a>
+            
             </div>
             
             <footer style="font-family: 'Magnolia Script', cursive; font-weight: bold; font-size: 12px; color: #6b7280; margin-top: 24px;">&copy; Elvix Luxe {% now 'Y' %}</footer>
